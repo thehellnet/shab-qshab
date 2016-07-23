@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>maps.html</file>
+        <file>icons/localgps.svg</file>
+        <file>icons/hab.svg</file>
+        <file>icons/config.svg</file>
+    </qresource>
+</RCC>

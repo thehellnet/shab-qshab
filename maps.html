@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Simple Map</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <style>
+            html, body, #map-canvas {
+                height: 100%;
+                margin: 0px;
+                padding: 0px
+            }
+        </style>
+        <script src="https://maps.googleapis.com/maps/api/js?sensor=false&language=it&region=IT&key=AIzaSyDgUNMSglhkTLRC4jsxmOURa_3lNisIoPg"></script>
+        <script>
+            var map = undefined;
+            var default_position = new google.maps.LatLng(39.44510959999999,9.540954499999998);
+
+            var infowindow = undefined;
+
+            var hab_marker = undefined;
+            var local_marker = undefined;
+
+            var mapOptions = {
+                zoom: 13,
+                maxZoom: 13,
+                center: default_position,
+                panControl: true,
+                zoomControl: true,
+                scaleControl: true,
+                rotateControl: true,
+                mapTypeControl: true,
+                streetViewControl: false,
+                overviewMapControl: true,
+                mapTypeId: google.maps.MapTypeId.SATELLITE
+            };
+
+            function updateBounds() {
+                var bounds = new google.maps.LatLngBounds();
+
+                if(hab_marker != undefined)
+                    bounds.extend(hab_marker.getPosition());
+
+                if(local_marker != undefined)
+                    bounds.extend(local_marker.getPosition());
+
+                if((hab_marker == undefined) && (local_marker == undefined))
+                    bounds.extend(default_position);
+
+                map.fitBounds(bounds);
+            }
+
+            function updateHab(lat, lon) {
+                var position = new google.maps.LatLng(lat, lon);
+
+                if(hab_marker == undefined) {
+                    hab_marker = new google.maps.Marker({
+                        position: position,
+                        map: map,
+                        icon: "http://maps.google.com/mapfiles/kml/paddle/red-circle.png",
+                        title: "HAB"
+                    });
+                }
+
+                hab_marker.setPosition(position);
+
+                updateBounds();
+            }
+
+            function updateLocal(lat, lon) {
+                var position = new google.maps.LatLng(lat, lon);
+
+                if(local_marker == undefined) {
+                    local_marker = new google.maps.Marker({
+                        position: position,
+                        map: map,
+                        icon: "http://maps.google.com/mapfiles/kml/paddle/grn-stars.png",
+                        title: "LOC"
+                    });
+                }
+
+                local_marker.setPosition(position);
+
+                updateBounds();
+            }
+
+            function removeHab() {
+                hab_marker.setMap(null);
+                hab_marker = undefined;
+                updateBounds();
+            }
+
+            function removeLocal() {
+                local_marker.setMap(null);
+                local_marker = undefined;
+                updateBounds();
+            }
+
+            function initialize() {
+                map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+                infowindow = new google.maps.InfoWindow();
+            }
+
+            google.maps.event.addDomListener(window, "load", initialize);
+        </script>
+    </head>
+
+    <body>
+        <div id="map-canvas"></div>
+    </body>
+
+</html>
