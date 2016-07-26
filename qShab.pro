@@ -14,12 +14,15 @@ CONFIG += c++11
 SOURCES += main.cpp \
         mainwindow.cpp \
     configuration.cpp \
-    configurationcontroller.cpp
+    configurationcontroller.cpp \
+    configwindow.cpp
 
 HEADERS  += mainwindow.hpp \
     configuration.hpp \
-    configurationcontroller.hpp
+    configurationcontroller.hpp \
+    configwindow.hpp
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    configwindow.ui
 
 RESOURCES += resources.qrc
