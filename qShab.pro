@@ -12,9 +12,13 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    configuration.cpp \
+    configurationcontroller.cpp
 
-HEADERS  += mainwindow.hpp
+HEADERS  += mainwindow.hpp \
+    configuration.hpp \
+    configurationcontroller.hpp
 
 FORMS    += mainwindow.ui
 

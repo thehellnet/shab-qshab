@@ -11,8 +11,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->actionFileExit, SIGNAL(triggered(bool)), this, SLOT(applicationExit()));
+
     webView = ui->webView;
-    initWebView();
+    initWebView(webView);
     webView->load(QUrl("qrc:/maps.html"));
 }
 
@@ -21,7 +23,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::initWebView()
+void MainWindow::setConfig(Configuration* value)
+{
+    config = value;
+}
+
+void MainWindow::initWebView(QWebEngineView* webView)
 {
     QWebEngineSettings* settings = webView->settings();
     settings->setAttribute(QWebEngineSettings::AutoLoadImages, true);
@@ -32,4 +39,9 @@ void MainWindow::initWebView()
     settings->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, true);
     settings->setAttribute(QWebEngineSettings::WebGLEnabled, true);
     settings->setAttribute(QWebEngineSettings::XSSAuditingEnabled, false);
+}
+
+void MainWindow::applicationExit()
+{
+    close();
 }
