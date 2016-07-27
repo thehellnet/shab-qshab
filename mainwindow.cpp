@@ -3,6 +3,7 @@
 #include <QUrl>
 
 #include "mainwindow.hpp"
+#include "configwindow.hpp"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -12,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->actionFileExit, SIGNAL(triggered(bool)), this, SLOT(applicationExit()));
+    connect(ui->actionFileConfig, SIGNAL(triggered(bool)), this, SLOT(showConfigWindow()));
 
     webView = ui->webView;
     initWebView(webView);
@@ -44,4 +46,12 @@ void MainWindow::initWebView(QWebEngineView* webView)
 void MainWindow::applicationExit()
 {
     close();
+}
+
+void MainWindow::showConfigWindow()
+{
+    ConfigWindow configWindow(this);
+    configWindow.setConfig(config);
+    configWindow.setModal(true);
+    configWindow.exec();
 }

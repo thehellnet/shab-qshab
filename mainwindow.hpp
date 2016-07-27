@@ -29,6 +29,7 @@ class MainWindow : public QMainWindow
 
     private slots:
         void applicationExit();
+        void showConfigWindow();
 };
 
 #endif // MAINWINDOW_HPP
