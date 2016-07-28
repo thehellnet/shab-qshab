@@ -15,7 +15,7 @@ void ConfigurationController::loadConfig(Configuration* config)
     QSettings settings;
 
     settings.beginGroup("hab");
-    config->setHabSerialPort(settings.value("serialPort", "").toString());
+    config->setHabSerialPort(settings.value("serialPort", "444").toString());
     config->setHabSerialSpeed(settings.value("serialSpeed", QSerialPort::Baud9600).value<QSerialPort::BaudRate>());
     settings.endGroup();
 

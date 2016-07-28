@@ -17,8 +17,6 @@ class ConfigWindow : public QDialog
         explicit ConfigWindow(QWidget *parent = 0);
         ~ConfigWindow();
 
-        void setConfig(Configuration* value);
-
     private:
         Ui::ConfigWindow *ui;
         QSettings* settings;
@@ -27,6 +25,7 @@ class ConfigWindow : public QDialog
         void load();
         void save();
         void updateSerialPortsLists();
+        void populateSerialPortsParams();
 
     private slots:
         void handleOK();

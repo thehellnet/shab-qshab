@@ -1,16 +1,40 @@
 #include "configuration.hpp"
 
+Configuration* Configuration::instance = nullptr;
+
 Configuration::Configuration()
 {
+    habRunning = false;
+    localGpsRunning = false;
+    serverSyncRunning = false;
 
+    habSerialPort = "";
+    habSerialSpeed = QSerialPort::Baud9600;
+
+    localGpsSerialEnable = false;
+    localGpsSerialPort = "";
+    localGpsSerialSpeed = QSerialPort::Baud9600;
+    localGpsSerialFlowControl = QSerialPort::NoFlowControl;
+    localGpsSerialParity = QSerialPort::NoParity;
+    localGpsSerialDataBits = QSerialPort::Data8;
+    localGpsSerialStopBits = QSerialPort::OneStop;
+
+    serverSyncEnable = false;
+    serverSyncAddress = "";
+    serverSyncPort = 12345;
+
+    logRawEnable = false;
+    logRawPath = "";
+    logImagesEnable = false;
+    logImagesPath = "";
 }
 
 Configuration* Configuration::getInstance()
 {
-    if(Configuration::instance == NULL)
-        Configuration::instance = new Configuration();
+    if(instance == nullptr)
+        instance = new Configuration();
 
-    return Configuration::instance;
+    return instance;
 }
 
 bool Configuration::getHabRunning() const
