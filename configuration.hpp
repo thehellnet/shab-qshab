@@ -5,12 +5,14 @@
 #include <QString>
 #include <QtSerialPort/QtSerialPort>
 
-class Configuration : public QObject
+class Configuration
 {
-        Q_OBJECT
+    private:
+        Configuration();
+        static Configuration* instance;
 
     public:
-        explicit Configuration(QObject *parent = 0);
+        static Configuration* getInstance();
 
         bool getHabRunning() const;
         void setHabRunning(bool value);

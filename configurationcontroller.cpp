@@ -1,4 +1,7 @@
 #include <QSettings>
+#include <QVariant>
+#include <QString>
+#include <QtSerialPort/QtSerialPort>
 
 #include "configurationcontroller.hpp"
 

@@ -2,6 +2,7 @@
 
 #include "mainwindow.hpp"
 #include "configuration.hpp"
+#include "configurationcontroller.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -10,12 +11,12 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("qShab");
     QCoreApplication::setApplicationVersion("0.1.0");
 
+    Configuration* config = Configuration::getInstance();
+    ConfigurationController::loadConfig(config);
+
     QApplication application(argc, argv);
 
-    Configuration config;
-
     MainWindow mainWindow;
-    mainWindow.setConfig(&config);
     mainWindow.show();
 
     return application.exec();

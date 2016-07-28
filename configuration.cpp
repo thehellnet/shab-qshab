@@ -1,8 +1,16 @@
 #include "configuration.hpp"
 
-Configuration::Configuration(QObject *parent) : QObject(parent)
+Configuration::Configuration()
 {
 
+}
+
+Configuration* Configuration::getInstance()
+{
+    if(Configuration::instance == NULL)
+        Configuration::instance = new Configuration();
+
+    return Configuration::instance;
 }
 
 bool Configuration::getHabRunning() const

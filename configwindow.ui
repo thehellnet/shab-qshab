@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>240</height>
+    <height>247</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideNone</enum>
@@ -34,30 +34,30 @@
          </property>
          <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="0,1">
           <item row="0" column="0">
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="habSerialPortLabel">
             <property name="text">
              <string>Port</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QComboBox" name="comboBox"/>
+           <widget class="QComboBox" name="habSerialPortComboBox"/>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="habSerialSpeedLabel">
             <property name="text">
              <string>Speed</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QComboBox" name="comboBox_2"/>
+           <widget class="QComboBox" name="habSerialSpeedComboBox"/>
           </item>
          </layout>
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <spacer name="habVerticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -77,7 +77,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QGroupBox" name="serialPortBox_2">
+        <widget class="QGroupBox" name="localGpsSerialPortBox">
          <property name="title">
           <string>Local GPS Serial Port</string>
          </property>
@@ -86,70 +86,70 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,1,0,1,0,0">
           <item row="1" column="1" colspan="2">
-           <widget class="QComboBox" name="comboBox_4"/>
+           <widget class="QComboBox" name="localGpsSerialSpeedComboBox"/>
           </item>
           <item row="3" column="2">
-           <widget class="QLabel" name="label_8">
+           <widget class="QLabel" name="localGpsSerialDataBitsLabel">
             <property name="text">
              <string>Data bits</string>
             </property>
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLabel" name="label_3">
+           <widget class="QLabel" name="localGpsSerialParityLabel">
             <property name="text">
              <string>Parity</string>
             </property>
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QComboBox" name="comboBox_3"/>
+           <widget class="QComboBox" name="localGpsSerialParityComboBox"/>
           </item>
           <item row="0" column="1" colspan="5">
-           <widget class="QComboBox" name="comboBox_6"/>
+           <widget class="QComboBox" name="localGpsSerialPortComboBox"/>
           </item>
           <item row="3" column="3">
-           <widget class="QComboBox" name="comboBox_5"/>
+           <widget class="QComboBox" name="localGpsSerialDataBitsComboBox"/>
           </item>
           <item row="3" column="5">
-           <widget class="QComboBox" name="comboBox_7"/>
+           <widget class="QComboBox" name="localGpsSerialStopBitsComboBox"/>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_7">
+           <widget class="QLabel" name="localGpsSerialSpeedLabel">
             <property name="text">
              <string>Speed</string>
             </property>
            </widget>
           </item>
           <item row="3" column="4">
-           <widget class="QLabel" name="label_9">
+           <widget class="QLabel" name="localGpsSerialStopBitsLabel">
             <property name="text">
              <string>Stop bits</string>
             </property>
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_6">
+           <widget class="QLabel" name="localGpsSerialPortLabel">
             <property name="text">
              <string>Port</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_10">
+           <widget class="QLabel" name="localGpsSerialFlowControlLabel">
             <property name="text">
              <string>Flow Control</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1" colspan="2">
-           <widget class="QComboBox" name="comboBox_8"/>
+           <widget class="QComboBox" name="localGpsSerialFlowControlComboBox"/>
           </item>
          </layout>
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_4">
+        <spacer name="localGpsVerticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -169,7 +169,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QGroupBox" name="serverGroupBox">
+        <widget class="QGroupBox" name="serverSyncGroupBox">
          <property name="title">
           <string>Server Sync</string>
          </property>
@@ -178,27 +178,27 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
+           <widget class="QLabel" name="serverSyncAddressLabel">
             <property name="text">
              <string>Address</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_3"/>
+           <widget class="QLineEdit" name="serverSyncAddressText"/>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_5">
+           <widget class="QLabel" name="serverSyncPortLabel">
             <property name="text">
              <string>Port</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_4"/>
+           <widget class="QLineEdit" name="serverSyncPortText"/>
           </item>
           <item row="2" column="1">
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="serverSyncRestoreDefaultsButton">
             <property name="text">
              <string>Restore default values</string>
             </property>
@@ -208,7 +208,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_3">
+        <spacer name="serverVerticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -228,40 +228,40 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="logGroupBox">
          <property name="title">
           <string>Log storage</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">
-           <widget class="QCheckBox" name="checkBox">
+           <widget class="QCheckBox" name="logRawCheckBox">
             <property name="text">
              <string>Store raw log</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit"/>
+           <widget class="QLineEdit" name="logRawPathText"/>
           </item>
           <item row="0" column="2">
-           <widget class="QToolButton" name="toolButton">
+           <widget class="QToolButton" name="logRawPathButton">
             <property name="text">
              <string>...</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QCheckBox" name="checkBox_2">
+           <widget class="QCheckBox" name="logImagesCheckBox">
             <property name="text">
              <string>Keep images</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_2"/>
+           <widget class="QLineEdit" name="logImagesPathText"/>
           </item>
           <item row="1" column="2">
-           <widget class="QToolButton" name="toolButton_2">
+           <widget class="QToolButton" name="logImagesPathButton">
             <property name="text">
              <string>...</string>
             </property>
@@ -271,7 +271,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_2">
+        <spacer name="logVerticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -299,6 +299,28 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>habSerialPortComboBox</tabstop>
+  <tabstop>habSerialSpeedComboBox</tabstop>
+  <tabstop>localGpsSerialPortBox</tabstop>
+  <tabstop>localGpsSerialPortComboBox</tabstop>
+  <tabstop>localGpsSerialSpeedComboBox</tabstop>
+  <tabstop>localGpsSerialFlowControlComboBox</tabstop>
+  <tabstop>localGpsSerialParityComboBox</tabstop>
+  <tabstop>localGpsSerialDataBitsComboBox</tabstop>
+  <tabstop>localGpsSerialStopBitsComboBox</tabstop>
+  <tabstop>serverSyncGroupBox</tabstop>
+  <tabstop>serverSyncAddressText</tabstop>
+  <tabstop>serverSyncPortText</tabstop>
+  <tabstop>serverSyncRestoreDefaultsButton</tabstop>
+  <tabstop>logRawCheckBox</tabstop>
+  <tabstop>logRawPathText</tabstop>
+  <tabstop>logRawPathButton</tabstop>
+  <tabstop>logImagesCheckBox</tabstop>
+  <tabstop>logImagesPathText</tabstop>
+  <tabstop>logImagesPathButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

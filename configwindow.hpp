@@ -21,10 +21,12 @@ class ConfigWindow : public QDialog
 
     private:
         Ui::ConfigWindow *ui;
+        QSettings* settings;
         Configuration* config;
 
         void load();
         void save();
+        void updateSerialPortsLists();
 
     private slots:
         void handleOK();
