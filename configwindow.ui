@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideNone</enum>
@@ -169,7 +169,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QGroupBox" name="serverSyncGroupBox">
+        <widget class="QGroupBox" name="serverSyncBox">
          <property name="title">
           <string>Server Sync</string>
          </property>
@@ -241,7 +241,11 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="logRawPathText"/>
+           <widget class="QLineEdit" name="logRawPathText">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item row="0" column="2">
            <widget class="QToolButton" name="logRawPathButton">
@@ -258,7 +262,11 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="logImagesPathText"/>
+           <widget class="QLineEdit" name="logImagesPathText">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item row="1" column="2">
            <widget class="QToolButton" name="logImagesPathButton">
@@ -310,7 +318,7 @@
   <tabstop>localGpsSerialParityComboBox</tabstop>
   <tabstop>localGpsSerialDataBitsComboBox</tabstop>
   <tabstop>localGpsSerialStopBitsComboBox</tabstop>
-  <tabstop>serverSyncGroupBox</tabstop>
+  <tabstop>serverSyncBox</tabstop>
   <tabstop>serverSyncAddressText</tabstop>
   <tabstop>serverSyncPortText</tabstop>
   <tabstop>serverSyncRestoreDefaultsButton</tabstop>

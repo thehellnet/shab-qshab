@@ -28,6 +28,14 @@ class ConfigWindow : public QDialog
         void populateSerialPortsParams();
 
     private slots:
+        void updateLocalGpsStatus();
+        void updateServerSyncStatus();
+        void updateLogRawStatus();
+        void updateLogImagesStatus();
+
+        void chooseLogRawPath();
+        void chooseLogIamgesPath();
+
         void handleOK();
         void handleApply();
         void handleClose();

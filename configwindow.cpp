@@ -1,6 +1,7 @@
 #include <QList>
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <QFileDialog>
 
 #include "configwindow.hpp"
 #include "configurationcontroller.hpp"
@@ -21,8 +22,18 @@ ConfigWindow::ConfigWindow(QWidget *parent) :
     connect(ui->buttonBox->button(QDialogButtonBox::Close), SIGNAL(clicked(bool)), this, SLOT(handleClose()));
     connect(ui->buttonBox->button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(handleReset()));
 
+//    connect(ui->localGpsSerialPortBox, SIGNAL(toggled(bool)), this, SLOT(updateLocalGpsStatus()));
+//    connect(ui->serverSyncBox, SIGNAL(toggled(bool)), this, SLOT(updateServerSyncStatus()));
+    connect(ui->logRawCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateLogRawStatus()));
+    connect(ui->logImagesCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateLogImagesStatus()));
+
+    connect(ui->logRawPathButton, SIGNAL(clicked(bool)), this, SLOT(chooseLogRawPath()));
+    connect(ui->logImagesPathButton, SIGNAL(clicked(bool)), this, SLOT(chooseLogIamgesPath()));
+
     populateSerialPortsParams();
     updateSerialPortsLists();
+    updateLogRawStatus();
+    updateLogImagesStatus();
 
     load();
 }
@@ -54,6 +65,75 @@ void ConfigWindow::handleReset()
 
 }
 
+void ConfigWindow::updateLocalGpsStatus()
+{
+//    bool status = ui->localGpsSerialPortBox->isChecked();
+
+//    ui->localGpsSerialPortLabel->setEnabled(status);
+//    ui->localGpsSerialPortComboBox->setEnabled(status);
+//    ui->localGpsSerialSpeedLabel->setEnabled(status);
+//    ui->localGpsSerialSpeedComboBox->setEnabled(status);
+//    ui->localGpsSerialFlowControlLabel->setEnabled(status);
+//    ui->localGpsSerialFlowControlComboBox->setEnabled(status);
+//    ui->localGpsSerialParityLabel->setEnabled(status);
+//    ui->localGpsSerialParityComboBox->setEnabled(status);
+//    ui->localGpsSerialDataBitsLabel->setEnabled(status);
+//    ui->localGpsSerialDataBitsComboBox->setEnabled(status);
+//    ui->localGpsSerialStopBitsLabel->setEnabled(status);
+//    ui->localGpsSerialStopBitsComboBox->setEnabled(status);
+}
+
+void ConfigWindow::updateServerSyncStatus()
+{
+//    bool status = ui->serverSyncBox->isChecked();
+
+//    ui->serverSyncAddressLabel->setEnabled(status);
+//    ui->serverSyncAddressText->setEnabled(status);
+//    ui->serverSyncPortLabel->setEnabled(status);
+//    ui->serverSyncPortText->setEnabled(status);
+}
+
+void ConfigWindow::updateLogRawStatus()
+{
+    bool status = ui->logRawCheckBox->isChecked();
+
+    ui->logRawPathText->setEnabled(status);
+    ui->logRawPathButton->setEnabled(status);
+}
+
+void ConfigWindow::updateLogImagesStatus()
+{
+    bool status = ui->logImagesCheckBox->isChecked();
+
+    ui->logImagesPathText->setEnabled(status);
+    ui->logImagesPathButton->setEnabled(status);
+}
+
+void ConfigWindow::chooseLogRawPath()
+{
+    QFileDialog dialog;
+    dialog.setDefaultSuffix("*.log");
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.exec();
+
+    QString fileName = dialog.selectedFiles().at(0);
+    ui->logRawPathText->setText(fileName);
+}
+
+void ConfigWindow::chooseLogIamgesPath()
+{
+    QFileDialog dialog;
+    dialog.setDefaultSuffix("");
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::Directory);
+    dialog.setOption(QFileDialog::ShowDirsOnly, true);
+    dialog.exec();
+
+    QString fileName = dialog.selectedFiles().at(0);
+    ui->logImagesPathText->setText(fileName);
+}
+
 void ConfigWindow::load()
 {
     int index;
@@ -71,18 +151,65 @@ void ConfigWindow::load()
         ui->habSerialPortComboBox->setCurrentIndex(0);
     }
 
-    index = -1;
     for(int i=0; i<ui->habSerialSpeedComboBox->count(); i++)
         if(ui->habSerialSpeedComboBox->itemData(i).value<QSerialPort::BaudRate>() == config->getHabSerialSpeed()) {
+            ui->habSerialSpeedComboBox->setCurrentIndex(i);
+            break;
+        }
+
+    ui->localGpsSerialPortBox->setChecked(config->getLocalGpsSerialEnable());
+
+    index = -1;
+    for(int i=0; i<ui->localGpsSerialPortComboBox->count(); i++)
+        if(ui->localGpsSerialPortComboBox->itemText(i) == config->getLocalGpsSerialPort()) {
             index = i;
             break;
         }
     if(index != -1) {
-        ui->habSerialSpeedComboBox->setCurrentIndex(index);
+        ui->localGpsSerialPortComboBox->setCurrentIndex(index);
     } else {
-        ui->habSerialSpeedComboBox->setItemText(0, config->getHabSerialPort());
-        ui->habSerialSpeedComboBox->setCurrentIndex(0);
+        ui->localGpsSerialPortComboBox->setItemText(0, config->getLocalGpsSerialPort());
+        ui->localGpsSerialPortComboBox->setCurrentIndex(0);
     }
+
+    for(int i=0; i<ui->localGpsSerialSpeedComboBox->count(); i++)
+        if(ui->localGpsSerialSpeedComboBox->itemData(i).value<QSerialPort::BaudRate>() == config->getLocalGpsSerialSpeed()) {
+            ui->localGpsSerialSpeedComboBox->setCurrentIndex(i);
+            break;
+        }
+
+    for(int i=0; i<ui->localGpsSerialFlowControlComboBox->count(); i++)
+        if(ui->localGpsSerialFlowControlComboBox->itemData(i).value<QSerialPort::FlowControl>() == config->getLocalGpsSerialFlowControl()) {
+            ui->localGpsSerialFlowControlComboBox->setCurrentIndex(i);
+            break;
+        }
+
+    for(int i=0; i<ui->localGpsSerialParityComboBox->count(); i++)
+        if(ui->localGpsSerialParityComboBox->itemData(i).value<QSerialPort::Parity>() == config->getLocalGpsSerialParity()) {
+            ui->localGpsSerialParityComboBox->setCurrentIndex(i);
+            break;
+        }
+
+    for(int i=0; i<ui->localGpsSerialDataBitsComboBox->count(); i++)
+        if(ui->localGpsSerialDataBitsComboBox->itemData(i).value<QSerialPort::DataBits>() == config->getLocalGpsSerialDataBits()) {
+            ui->localGpsSerialDataBitsComboBox->setCurrentIndex(i);
+            break;
+        }
+
+    for(int i=0; i<ui->localGpsSerialStopBitsComboBox->count(); i++)
+        if(ui->localGpsSerialStopBitsComboBox->itemData(i).value<QSerialPort::StopBits>() == config->getLocalGpsSerialStopBits()) {
+            ui->localGpsSerialStopBitsComboBox->setCurrentIndex(i);
+            break;
+        }
+
+    ui->serverSyncBox->setChecked(config->getServerSyncEnable());
+    ui->serverSyncAddressText->setText(config->getServerSyncAddress());
+    ui->serverSyncPortText->setText(QString::number(config->getServerSyncPort()));
+
+    ui->logRawCheckBox->setChecked(config->getLogRawEnable());
+    ui->logRawPathText->setText(config->getLogRawPath());
+    ui->logImagesCheckBox->setChecked(config->getLogImagesEnable());
+    ui->logImagesPathText->setText(config->getLogImagesPath());
 }
 
 void ConfigWindow::save()
