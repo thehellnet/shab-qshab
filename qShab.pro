@@ -15,12 +15,14 @@ SOURCES += main.cpp \
         mainwindow.cpp \
     configuration.cpp \
     configurationcontroller.cpp \
-    configwindow.cpp
+    configwindow.cpp \
+    statusbarwidgets.cpp
 
 HEADERS  += mainwindow.hpp \
     configuration.hpp \
     configurationcontroller.hpp \
-    configwindow.hpp
+    configwindow.hpp \
+    statusbarwidgets.hpp
 
 FORMS    += mainwindow.ui \
     configwindow.ui

@@ -3,8 +3,11 @@
 
 #include <QMainWindow>
 #include <QWebEngineView>
+#include <QStatusBar>
 
 #include "configuration.hpp"
+#include "configwindow.hpp"
+#include "statusbarwidgets.hpp"
 
 namespace Ui {
     class MainWindow;
@@ -19,15 +22,21 @@ class MainWindow : public QMainWindow
         ~MainWindow();
 
     private:
-        Ui::MainWindow *ui;
+        Ui::MainWindow* ui;
+        StatusBarWidgets* statusBarWidgets;
         Configuration* config;
+        ConfigWindow* configWindow;
+
+        QStatusBar* statusBar;
         QWebEngineView* webView;
 
-        void initWebView(QWebEngineView* webView);
+        void initWebView();
+        void initStatusBar();
 
     private slots:
         void applicationExit();
         void showConfigWindow();
+        void configurationChanged();
 };
 
 #endif // MAINWINDOW_HPP

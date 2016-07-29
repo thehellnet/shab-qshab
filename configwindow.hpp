@@ -28,8 +28,6 @@ class ConfigWindow : public QDialog
         void populateSerialPortsParams();
 
     private slots:
-        void updateLocalGpsStatus();
-        void updateServerSyncStatus();
         void updateLogRawStatus();
         void updateLogImagesStatus();
 
@@ -40,6 +38,9 @@ class ConfigWindow : public QDialog
         void handleApply();
         void handleClose();
         void handleReset();
+
+    signals:
+        void configurationChanged();
 };
 
 #endif // CONFIGWINDOW_HPP

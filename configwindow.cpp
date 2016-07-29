@@ -22,8 +22,6 @@ ConfigWindow::ConfigWindow(QWidget *parent) :
     connect(ui->buttonBox->button(QDialogButtonBox::Close), SIGNAL(clicked(bool)), this, SLOT(handleClose()));
     connect(ui->buttonBox->button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(handleReset()));
 
-//    connect(ui->localGpsSerialPortBox, SIGNAL(toggled(bool)), this, SLOT(updateLocalGpsStatus()));
-//    connect(ui->serverSyncBox, SIGNAL(toggled(bool)), this, SLOT(updateServerSyncStatus()));
     connect(ui->logRawCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateLogRawStatus()));
     connect(ui->logImagesCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateLogImagesStatus()));
 
@@ -47,12 +45,12 @@ ConfigWindow::~ConfigWindow()
 
 void ConfigWindow::handleOK()
 {
-
+    save();
 }
 
 void ConfigWindow::handleApply()
 {
-
+    save();
 }
 
 void ConfigWindow::handleClose()
@@ -62,35 +60,7 @@ void ConfigWindow::handleClose()
 
 void ConfigWindow::handleReset()
 {
-
-}
-
-void ConfigWindow::updateLocalGpsStatus()
-{
-//    bool status = ui->localGpsSerialPortBox->isChecked();
-
-//    ui->localGpsSerialPortLabel->setEnabled(status);
-//    ui->localGpsSerialPortComboBox->setEnabled(status);
-//    ui->localGpsSerialSpeedLabel->setEnabled(status);
-//    ui->localGpsSerialSpeedComboBox->setEnabled(status);
-//    ui->localGpsSerialFlowControlLabel->setEnabled(status);
-//    ui->localGpsSerialFlowControlComboBox->setEnabled(status);
-//    ui->localGpsSerialParityLabel->setEnabled(status);
-//    ui->localGpsSerialParityComboBox->setEnabled(status);
-//    ui->localGpsSerialDataBitsLabel->setEnabled(status);
-//    ui->localGpsSerialDataBitsComboBox->setEnabled(status);
-//    ui->localGpsSerialStopBitsLabel->setEnabled(status);
-//    ui->localGpsSerialStopBitsComboBox->setEnabled(status);
-}
-
-void ConfigWindow::updateServerSyncStatus()
-{
-//    bool status = ui->serverSyncBox->isChecked();
-
-//    ui->serverSyncAddressLabel->setEnabled(status);
-//    ui->serverSyncAddressText->setEnabled(status);
-//    ui->serverSyncPortLabel->setEnabled(status);
-//    ui->serverSyncPortText->setEnabled(status);
+    load();
 }
 
 void ConfigWindow::updateLogRawStatus()
@@ -137,6 +107,12 @@ void ConfigWindow::chooseLogIamgesPath()
 void ConfigWindow::load()
 {
     int index;
+
+    ConfigurationController::loadConfig(config);
+
+    ui->habSerialPortBox->setEnabled(!config->getHabRunning());
+    ui->localGpsSerialPortBox->setEnabled(!config->getLocalGpsRunning());
+    ui->serverSyncBox->setEnabled(!config->getServerSyncRunning());
 
     index = -1;
     for(int i=0; i<ui->habSerialPortComboBox->count(); i++)
@@ -214,7 +190,29 @@ void ConfigWindow::load()
 
 void ConfigWindow::save()
 {
+    config->setHabSerialPort(ui->habSerialPortComboBox->currentText());
+    config->setHabSerialSpeed(ui->habSerialSpeedComboBox->currentData().value<QSerialPort::BaudRate>());
+
+    config->setLocalGpsSerialEnable(ui->localGpsSerialPortBox->isChecked());
+    config->setLocalGpsSerialPort(ui->localGpsSerialPortComboBox->currentText());
+    config->setLocalGpsSerialSpeed(ui->localGpsSerialPortComboBox->currentData().value<QSerialPort::BaudRate>());
+    config->setLocalGpsSerialFlowControl(ui->localGpsSerialFlowControlComboBox->currentData().value<QSerialPort::FlowControl>());
+    config->setLocalGpsSerialParity(ui->localGpsSerialParityComboBox->currentData().value<QSerialPort::Parity>());
+    config->setLocalGpsSerialDataBits(ui->localGpsSerialDataBitsComboBox->currentData().value<QSerialPort::DataBits>());
+    config->setLocalGpsSerialStopBits(ui->localGpsSerialStopBitsComboBox->currentData().value<QSerialPort::StopBits>());
+
+    config->setServerSyncEnable(ui->serverSyncBox->isChecked());
+    config->setServerSyncAddress(ui->serverSyncAddressText->text());
+    config->setServerSyncPort(ui->serverSyncPortText->text().toUInt());
+
+    config->setLogRawEnable(ui->logRawCheckBox->isChecked());
+    config->setLogRawPath(ui->logRawPathText->text());
+    config->setLogImagesEnable(ui->logImagesCheckBox->isChecked());
+    config->setLogImagesPath(ui->logImagesPathText->text());
+
     ConfigurationController::saveConfig(config);
+
+    emit configurationChanged();
 }
 
 void ConfigWindow::updateSerialPortsLists()
