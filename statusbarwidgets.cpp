@@ -1,6 +1,7 @@
 #include <QDateTime>
 
 #include "statusbarwidgets.hpp"
+#include "utility.hpp"
 
 StatusBarWidgets::StatusBarWidgets(QObject *parent) : QObject(parent)
 {
@@ -84,20 +85,23 @@ void StatusBarWidgets::updateFromConfig()
 {
     QString text;
 
-    text = QString("<strong>HAB:</strong> %1 %2 8-N-1")
+    text = QString("<strong>HAB:</strong> %1 %2 %3")
            .arg(config->getHabSerialPort())
-           .arg(config->getHabSerialSpeed());
+           .arg(config->getHabSerialSpeed())
+           .arg(Utility::serialPortParams(QSerialPort::Data8, QSerialPort::NoParity, QSerialPort::OneStop));
     habSerial->setText(text);
     habSerial->setEnabled(config->getHabRunning());
 
     text = "<strong>Local GPS:</strong> disabled";
-    if(config->getLocalGpsSerialEnable() && config->getLocalGpsSerialPort().length() > 0)
-        text = QString("<strong>Local GPS:</strong> %1 %2 %3-%4-%5")
+    if(config->getLocalGpsSerialEnable() && config->getLocalGpsSerialPort().length() > 0) {
+        QString serialPortParams = Utility::serialPortParams(config->getLocalGpsSerialDataBits(),
+                                                     config->getLocalGpsSerialParity(),
+                                                     config->getLocalGpsSerialStopBits());
+        text = QString("<strong>Local GPS:</strong> %1 %2 %3")
                .arg(config->getLocalGpsSerialPort())
                .arg(config->getLocalGpsSerialSpeed())
-               .arg(config->getLocalGpsSerialDataBits())
-               .arg(config->getLocalGpsSerialParity())
-               .arg(config->getLocalGpsSerialStopBits());
+               .arg(serialPortParams);
+    }
     localGpsSerial->setText(text);
     localGpsSerial->setEnabled(config->getLocalGpsRunning());
 
@@ -107,5 +111,5 @@ void StatusBarWidgets::updateFromConfig()
                .arg(config->getServerSyncAddress())
                .arg(config->getServerSyncPort());
     serverSync->setText(text);
-    serverSync->setEnabled(config->getServerSyncEnable());
+    serverSync->setEnabled(config->getServerSyncRunning());
 }

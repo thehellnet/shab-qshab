@@ -16,13 +16,20 @@ SOURCES += main.cpp \
     configuration.cpp \
     configurationcontroller.cpp \
     configwindow.cpp \
-    statusbarwidgets.cpp
+    statusbarwidgets.cpp \
+    utility.cpp \
+    line.cpp \
+    lineparser.cpp
 
 HEADERS  += mainwindow.hpp \
     configuration.hpp \
     configurationcontroller.hpp \
     configwindow.hpp \
-    statusbarwidgets.hpp
+    statusbarwidgets.hpp \
+    utility.hpp \
+    command.hpp \
+    line.hpp \
+    lineparser.hpp
 
 FORMS    += mainwindow.ui \
     configwindow.ui
