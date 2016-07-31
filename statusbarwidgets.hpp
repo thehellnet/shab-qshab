@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QTimer>
 
-#include "configuration.hpp"
+#include "config/configuration.hpp"
 
 class StatusBarWidgets : public QObject
 {

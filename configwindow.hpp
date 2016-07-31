@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "configuration.hpp"
+#include "config/configuration.hpp"
 
 namespace Ui {
     class ConfigWindow;

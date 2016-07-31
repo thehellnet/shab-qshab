@@ -2,8 +2,8 @@
 
 #include "mainwindow.hpp"
 #include "configwindow.hpp"
-#include "configuration.hpp"
-#include "configurationcontroller.hpp"
+#include "config/configuration.hpp"
+#include "config/configurationcontroller.hpp"
 
 int main(int argc, char *argv[])
 {

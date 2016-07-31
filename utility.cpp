@@ -69,3 +69,15 @@ QString Utility::serialPortParams(QSerialPort::DataBits dataBits, QSerialPort::P
             .arg(parityString)
             .arg(stopBits);
 }
+
+quint16 Utility::checksum16(QString rawData)
+{
+    unsigned int ret = 0;
+
+    for(int i=0; i<rawData.length(); i++) {
+        ret += (unsigned char) rawData.at(i).toLatin1();
+        ret %= 0xFFFF;
+    }
+
+    return (quint16) ret;
+}

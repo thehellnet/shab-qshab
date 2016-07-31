@@ -4,7 +4,7 @@
 #include <QFileDialog>
 
 #include "configwindow.hpp"
-#include "configurationcontroller.hpp"
+#include "config/configurationcontroller.hpp"
 #include "ui_configwindow.h"
 
 ConfigWindow::ConfigWindow(QWidget *parent) :

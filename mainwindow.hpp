@@ -5,7 +5,7 @@
 #include <QWebEngineView>
 #include <QStatusBar>
 
-#include "configuration.hpp"
+#include "config/configuration.hpp"
 #include "configwindow.hpp"
 #include "statusbarwidgets.hpp"
 

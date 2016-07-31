@@ -13,23 +13,35 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
         mainwindow.cpp \
-    configuration.cpp \
-    configurationcontroller.cpp \
     configwindow.cpp \
     statusbarwidgets.cpp \
     utility.cpp \
-    line.cpp \
-    lineparser.cpp
+    config/configuration.cpp \
+    config/configurationcontroller.cpp \
+    protocol/line.cpp \
+    protocol/lineparser.cpp \
+    protocol/habpositionline.cpp \
+    protocol/habimageline.cpp \
+    protocol/habtelemetryline.cpp \
+    protocol/clientconnectline.cpp \
+    protocol/clientupdateline.cpp \
+    protocol/clientdisconnectline.cpp
 
 HEADERS  += mainwindow.hpp \
-    configuration.hpp \
-    configurationcontroller.hpp \
     configwindow.hpp \
     statusbarwidgets.hpp \
     utility.hpp \
-    command.hpp \
-    line.hpp \
-    lineparser.hpp
+    config/configuration.hpp \
+    config/configurationcontroller.hpp \
+    protocol/command.hpp \
+    protocol/line.hpp \
+    protocol/lineparser.hpp \
+    protocol/habpositionline.hpp \
+    protocol/habimageline.hpp \
+    protocol/habtelemetryline.hpp \
+    protocol/clientconnectline.hpp \
+    protocol/clientupdateline.hpp \
+    protocol/clientdisconnectline.hpp
 
 FORMS    += mainwindow.ui \
     configwindow.ui
