@@ -8,6 +8,7 @@ DataHandler::DataHandler(QObject *parent) : QObject(parent)
 
     serverSocket = new ServerSocket(this);
     connect(serverSocket, SIGNAL(newLine(QString)), this, SLOT(handleNewLine(QString)));
+    connect(serverSocket, SIGNAL(newSocketState(QAbstractSocket::SocketState)), this, SLOT(handleServerSyncSocketEvent(QAbstractSocket::SocketState)));
 }
 
 DataHandler::~DataHandler()
@@ -54,8 +55,14 @@ void DataHandler::handleNewLine(QString strLine)
     serverSocket->writeLine(lastLine);
 
     try {
-        emit newLine(LineParser::parseLine(strLine));
+        Line line = LineParser::parseLine(strLine);
+        emit newLine(line);
     } catch(ProtocolException &e) {
         return;
     }
+}
+
+void DataHandler::handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState)
+{
+    emit newSocketState(socketState);
 }

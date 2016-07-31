@@ -32,7 +32,7 @@ void ServerSocket::stop()
 
 void ServerSocket::socketStateChanged(QAbstractSocket::SocketState socketState)
 {
-    qDebug() << socketState;
+    emit newSocketState(socketState);
 }
 
 void ServerSocket::writeLine(QString line)

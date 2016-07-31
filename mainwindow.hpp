@@ -39,11 +39,13 @@ class MainWindow : public QMainWindow
     private slots:
         void applicationExit();
         void showConfigWindow();
+        void updateActionEnableStatus();
         void configurationChanged();
         void toogleHab();
         void toogleLocalGps();
         void toogleServerSync();
         void newLine(Line line);
+        void handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState);
 };
 
 #endif // MAINWINDOW_HPP

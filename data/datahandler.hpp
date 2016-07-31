@@ -2,6 +2,8 @@
 #define DATAHANDLER_HPP
 
 #include <QObject>
+#include <QString>
+#include <QAbstractSocket>
 
 #include "config/configuration.hpp"
 #include "protocol/line.hpp"
@@ -30,9 +32,11 @@ class DataHandler : public QObject
 
     private slots:
         void handleNewLine(QString strLine);
+        void handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState);
 
     signals:
         void newLine(Line line);
+        void newSocketState(QAbstractSocket::SocketState socketState);
 };
 
 #endif // DATAHANDLER_HPP

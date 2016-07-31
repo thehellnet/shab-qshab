@@ -15,12 +15,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     dataHandler = new DataHandler(this);
     connect(dataHandler, SIGNAL(newLine(Line)), this, SLOT(newLine(Line)));
+    connect(dataHandler, SIGNAL(newSocketState(QAbstractSocket::SocketState)), this, SLOT(handleServerSyncSocketEvent(QAbstractSocket::SocketState)));
 
     configWindow = new ConfigWindow(this);
     configWindow->setModal(true);
     connect(configWindow, SIGNAL(configurationChanged()), this, SLOT(configurationChanged()));
 
     statusBarWidgets = new StatusBarWidgets(this);
+    statusBarWidgets->updateFromConfig();
+
     statusBar = ui->statusBar;
     initStatusBar();
 
@@ -33,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionStatusHAB, SIGNAL(triggered(bool)), this, SLOT(toogleHab()));
     connect(ui->actionStatusLocalGPS, SIGNAL(triggered(bool)), this, SLOT(toogleLocalGps()));
     connect(ui->actionStatusServerSync, SIGNAL(triggered(bool)), this, SLOT(toogleServerSync()));
+
+    updateActionEnableStatus();
 }
 
 MainWindow::~MainWindow()
@@ -82,9 +87,17 @@ void MainWindow::showStatusBarMessage(QString message, int timeout)
     ui->statusBar->showMessage(message, timeout);
 }
 
+void MainWindow::updateActionEnableStatus()
+{
+    ui->actionStatusLocalGPS->setEnabled(config->getLocalGpsSerialEnable());
+    ui->actionStatusServerSync->setEnabled(config->getServerSyncEnable());
+}
+
 void MainWindow::configurationChanged()
 {
     showStatusBarMessage("Configuration saved");
+
+    updateActionEnableStatus();
     statusBarWidgets->updateFromConfig();
 }
 
@@ -146,6 +159,26 @@ void MainWindow::toogleServerSync()
         showStatusBarMessage("Server Sync stop");
 
     statusBarWidgets->updateFromConfig();
+}
+
+void MainWindow::handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState)
+{
+    switch(socketState) {
+        case QAbstractSocket::HostLookupState:
+            showStatusBarMessage("Host lookup...");
+            break;
+        case QAbstractSocket::ConnectingState:
+            showStatusBarMessage("Connecting...");
+            break;
+        case QAbstractSocket::ConnectedState:
+            showStatusBarMessage("Socket connected");
+            break;
+        case QAbstractSocket::ClosingState:
+            showStatusBarMessage("Socket closing...");
+            break;
+        default:
+            showStatusBarMessage("Socket not connected");
+    }
 }
 
 void MainWindow::newLine(Line line)

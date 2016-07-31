@@ -27,6 +27,7 @@ class ServerSocket : public QObject
 
     signals:
         void newLine(QString newLine);
+        void newSocketState(QAbstractSocket::SocketState socketState);
 };
 
 #endif // SERVERSOCKET_HPP
