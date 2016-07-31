@@ -28,12 +28,7 @@ ConfigWindow::ConfigWindow(QWidget *parent) :
     connect(ui->logRawPathButton, SIGNAL(clicked(bool)), this, SLOT(chooseLogRawPath()));
     connect(ui->logImagesPathButton, SIGNAL(clicked(bool)), this, SLOT(chooseLogIamgesPath()));
 
-    populateSerialPortsParams();
-    updateSerialPortsLists();
-    updateLogRawStatus();
-    updateLogImagesStatus();
-
-    load();
+    init();
 }
 
 ConfigWindow::~ConfigWindow()
@@ -277,4 +272,14 @@ void ConfigWindow::populateSerialPortsParams()
     ui->localGpsSerialStopBitsComboBox->addItem("1 bit", QSerialPort::OneStop);
     ui->localGpsSerialStopBitsComboBox->addItem("1.5 bit", QSerialPort::OneAndHalfStop);
     ui->localGpsSerialStopBitsComboBox->addItem("2 bit", QSerialPort::TwoStop);
+}
+
+void ConfigWindow::init()
+{
+    populateSerialPortsParams();
+    updateSerialPortsLists();
+    updateLogRawStatus();
+    updateLogImagesStatus();
+
+    load();
 }

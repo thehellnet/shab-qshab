@@ -27,6 +27,9 @@ class ConfigWindow : public QDialog
         void updateSerialPortsLists();
         void populateSerialPortsParams();
 
+    public slots:
+        void init();
+
     private slots:
         void updateLogRawStatus();
         void updateLogImagesStatus();

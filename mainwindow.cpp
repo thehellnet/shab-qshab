@@ -13,12 +13,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     config = Configuration::getInstance();
 
+    dataHandler = new DataHandler(this);
+    connect(dataHandler, SIGNAL(newLine(Line)), this, SLOT(newLine(Line)));
+
     configWindow = new ConfigWindow(this);
     configWindow->setModal(true);
     connect(configWindow, SIGNAL(configurationChanged()), this, SLOT(configurationChanged()));
-
-    connect(ui->actionFileExit, SIGNAL(triggered(bool)), this, SLOT(applicationExit()));
-    connect(ui->actionFileConfig, SIGNAL(triggered(bool)), this, SLOT(showConfigWindow()));
 
     statusBarWidgets = new StatusBarWidgets(this);
     statusBar = ui->statusBar;
@@ -26,12 +26,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     webView = ui->webView;
     initWebView();
+
+    connect(ui->actionFileExit, SIGNAL(triggered(bool)), this, SLOT(applicationExit()));
+    connect(ui->actionFileConfig, SIGNAL(triggered(bool)), this, SLOT(showConfigWindow()));
+
+    connect(ui->actionStatusHAB, SIGNAL(triggered(bool)), this, SLOT(toogleHab()));
+    connect(ui->actionStatusLocalGPS, SIGNAL(triggered(bool)), this, SLOT(toogleLocalGps()));
+    connect(ui->actionStatusServerSync, SIGNAL(triggered(bool)), this, SLOT(toogleServerSync()));
 }
 
 MainWindow::~MainWindow()
 {
     delete statusBarWidgets;
     delete configWindow;
+    delete dataHandler;
     delete ui;
 }
 
@@ -65,11 +73,82 @@ void MainWindow::applicationExit()
 
 void MainWindow::showConfigWindow()
 {
+    configWindow->init();
     configWindow->exec();
+}
+
+void MainWindow::showStatusBarMessage(QString message, int timeout)
+{
+    ui->statusBar->showMessage(message, timeout);
 }
 
 void MainWindow::configurationChanged()
 {
-    ui->statusBar->showMessage("Configuration saved", 2000);
+    showStatusBarMessage("Configuration saved");
     statusBarWidgets->updateFromConfig();
+}
+
+void MainWindow::toogleHab()
+{
+    bool status = !config->getHabRunning();
+    ui->actionStatusHAB->setChecked(status);
+
+    if(status)
+        dataHandler->startHab();
+    else
+        dataHandler->stopHab();
+
+    config->setHabRunning(status);
+
+    if(status)
+        showStatusBarMessage("Hab Serial port start");
+    else
+        showStatusBarMessage("Hab Serial port stop");
+
+    statusBarWidgets->updateFromConfig();
+}
+
+void MainWindow::toogleLocalGps()
+{
+    bool status = !config->getLocalGpsRunning();
+    ui->actionStatusLocalGPS->setChecked(status);
+
+    if(status)
+        dataHandler->startLocalGps();
+    else
+        dataHandler->stopLocalGps();
+
+    config->setLocalGpsRunning(status);
+
+    if(status)
+        showStatusBarMessage("Local GPS start");
+    else
+        showStatusBarMessage("Local GPS stop");
+
+    statusBarWidgets->updateFromConfig();
+}
+
+void MainWindow::toogleServerSync()
+{
+    bool status = !config->getServerSyncRunning();
+    ui->actionStatusServerSync->setChecked(status);
+
+    if(status)
+        dataHandler->startServerSync();
+    else
+        dataHandler->stopServerSync();
+
+    config->setServerSyncRunning(status);
+
+    if(status)
+        showStatusBarMessage("Server Sync start");
+    else
+        showStatusBarMessage("Server Sync stop");
+
+    statusBarWidgets->updateFromConfig();
+}
+
+void MainWindow::newLine(Line line)
+{
+
 }

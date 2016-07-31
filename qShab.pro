@@ -25,7 +25,10 @@ SOURCES += main.cpp \
     protocol/habtelemetryline.cpp \
     protocol/clientconnectline.cpp \
     protocol/clientupdateline.cpp \
-    protocol/clientdisconnectline.cpp
+    protocol/clientdisconnectline.cpp \
+    data/datahandler.cpp \
+    data/serversocket.cpp \
+    protocol/protocolexception.cpp
 
 HEADERS  += mainwindow.hpp \
     configwindow.hpp \
@@ -41,7 +44,10 @@ HEADERS  += mainwindow.hpp \
     protocol/habtelemetryline.hpp \
     protocol/clientconnectline.hpp \
     protocol/clientupdateline.hpp \
-    protocol/clientdisconnectline.hpp
+    protocol/clientdisconnectline.hpp \
+    data/datahandler.hpp \
+    data/serversocket.hpp \
+    protocol/protocolexception.hpp
 
 FORMS    += mainwindow.ui \
     configwindow.ui
