@@ -181,7 +181,12 @@ void MainWindow::handleServerSyncSocketEvent(QAbstractSocket::SocketState socket
     }
 }
 
-void MainWindow::newLine(Line line)
+void MainWindow::appendLogLine(QString line)
 {
 
+}
+
+void MainWindow::newLine(Line line)
+{
+    appendLogLine(line.getRawLine());
 }

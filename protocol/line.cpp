@@ -5,6 +5,16 @@ Line::Line(Command command)
     this->command = command;
 }
 
+QString Line::getRawLine() const
+{
+    return rawLine;
+}
+
+void Line::setRawLine(const QString& value)
+{
+    rawLine = value;
+}
+
 Command Line::getCommand() const
 {
     return command;

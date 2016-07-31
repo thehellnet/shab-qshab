@@ -35,6 +35,7 @@ class MainWindow : public QMainWindow
         void initWebView();
         void initStatusBar();
         void showStatusBarMessage(QString message, int timeout = 3000);
+        void appendLogLine(QString line);
 
     private slots:
         void applicationExit();
