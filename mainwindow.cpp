@@ -188,8 +188,9 @@ void MainWindow::appendLogLine(QString line)
     QTextEdit* logText = ui->logText;
     logText->append(line + "\n");
 
+    QTextCursor cursor = logText->textCursor();
+
     while(logText->document()->lineCount() > 50) {
-        QTextCursor cursor = logText->textCursor();
         cursor.movePosition(QTextCursor::Start);
         cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, 0);
         cursor.select(QTextCursor::LineUnderCursor);
