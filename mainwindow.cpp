@@ -1,6 +1,8 @@
 #include <QWebEngineSettings>
 #include <QFile>
 #include <QUrl>
+#include <QTextEdit>
+#include <QTextCursor>
 
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
@@ -183,7 +185,18 @@ void MainWindow::handleServerSyncSocketEvent(QAbstractSocket::SocketState socket
 
 void MainWindow::appendLogLine(QString line)
 {
+    QTextEdit* logText = ui->logText;
+    logText->append(line + "\n");
 
+    while(logText->document()->lineCount() > 50) {
+        QTextCursor cursor = logText->textCursor();
+        cursor.movePosition(QTextCursor::Start);
+        cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, 0);
+        cursor.select(QTextCursor::LineUnderCursor);
+        cursor.removeSelectedText();
+    }
+
+    cursor.movePosition(QTextCursor::End);
 }
 
 void MainWindow::newLine(Line line)
