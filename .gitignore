@@ -50,7 +50,7 @@ ui_*.h
 Makefile*
 build-*
 
-.autosave
+*.autosave
 
 *.qmlproject.user
 *.qmlproject.user.*

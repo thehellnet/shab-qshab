@@ -196,6 +196,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionFileConfig"/>
+   <addaction name="separator"/>
    <addaction name="actionStatusHAB"/>
    <addaction name="actionStatusLocalGPS"/>
    <addaction name="actionStatusServerSync"/>

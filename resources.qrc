@@ -4,5 +4,6 @@
         <file>icons/localgps.svg</file>
         <file>icons/hab.svg</file>
         <file>icons/config.svg</file>
+        <file>icons/serversync.svg</file>
     </qresource>
 </RCC>
