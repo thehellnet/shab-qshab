@@ -45,7 +45,7 @@ HabPositionLine LineParser::parseHabPosition(QString rawLine, QStringList items)
 
 HabImageLine LineParser::parseHabImage(QString rawLine, QStringList items)
 {
-    // 0000|HP|slicenum|slicetot|base64data
+    // 0000|HI|slicenum|slicetot|base64data
     if(items.size() != 5 || items[2] != "HI")
         throw ProtocolException();
 
@@ -59,7 +59,7 @@ HabImageLine LineParser::parseHabImage(QString rawLine, QStringList items)
 
 HabTelemetryLine LineParser::parseHabTelemetry(QString rawLine, QStringList items)
 {
-    // 0000|HP|
+    // 0000|HT|
     if(items.size() != 4 || items[2] != "HT")
         throw ProtocolException();
 

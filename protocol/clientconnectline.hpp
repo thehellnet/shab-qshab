@@ -10,7 +10,7 @@ class ClientConnectLine : public Line
 {
     public:
         ClientConnectLine();
-        ClientConnectLine createCopy();
+        ~ClientConnectLine();
 
         QString getId() const;
         void setId(const QString& value);

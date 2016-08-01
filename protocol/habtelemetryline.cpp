@@ -4,3 +4,8 @@ HabTelemetryLine::HabTelemetryLine() : Line(Command::HabTelemetry)
 {
 
 }
+
+HabTelemetryLine::~HabTelemetryLine()
+{
+
+}

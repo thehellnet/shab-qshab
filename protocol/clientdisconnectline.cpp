@@ -5,6 +5,11 @@ ClientDisconnectLine::ClientDisconnectLine() : Line(Command::ClientDisconnect)
 
 }
 
+ClientDisconnectLine::~ClientDisconnectLine()
+{
+
+}
+
 QString ClientDisconnectLine::getId() const
 {
     return id;

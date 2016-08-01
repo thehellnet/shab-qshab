@@ -8,6 +8,7 @@ class ClientUpdateLine : public Line
 {
     public:
         ClientUpdateLine();
+        ~ClientUpdateLine();
 
         float getLatitude() const;
         void setLatitude(float value);

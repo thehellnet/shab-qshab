@@ -5,6 +5,11 @@ HabPositionLine::HabPositionLine() : Line(Command::HabPosition)
 
 }
 
+HabPositionLine::~HabPositionLine()
+{
+
+}
+
 float HabPositionLine::getLatitude() const
 {
     return latitude;

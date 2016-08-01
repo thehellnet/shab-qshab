@@ -5,6 +5,11 @@ HabImageLine::HabImageLine() : Line(Command::HabImage)
 
 }
 
+HabImageLine::~HabImageLine()
+{
+
+}
+
 int HabImageLine::getSliceTot() const
 {
     return sliceTot;

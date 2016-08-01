@@ -5,6 +5,11 @@ ClientUpdateLine::ClientUpdateLine() : Line(Command::ClientUpdate)
 
 }
 
+ClientUpdateLine::~ClientUpdateLine()
+{
+
+}
+
 float ClientUpdateLine::getLatitude() const
 {
     return latitude;

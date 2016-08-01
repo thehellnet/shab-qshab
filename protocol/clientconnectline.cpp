@@ -5,6 +5,11 @@ ClientConnectLine::ClientConnectLine() : Line(Command::ClientConnect)
 
 }
 
+ClientConnectLine::~ClientConnectLine()
+{
+
+}
+
 QString ClientConnectLine::getId() const
 {
     return id;

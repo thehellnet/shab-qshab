@@ -10,6 +10,7 @@ class HabImageLine : public Line
 {
     public:
         HabImageLine();
+        ~HabImageLine();
 
         int getSliceTot() const;
         void setSliceTot(int value);

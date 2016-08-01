@@ -8,6 +8,7 @@ class HabPositionLine : public Line
 {
     public:
         HabPositionLine();
+        ~HabPositionLine();
 
         float getLatitude() const;
         void setLatitude(float value);

@@ -64,5 +64,9 @@ void DataHandler::handleNewLine(QString strLine)
 
 void DataHandler::handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState)
 {
+    if(socketState == QAbstractSocket::ConnectedState) {
+
+    }
+
     emit newSocketState(socketState);
 }

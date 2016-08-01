@@ -8,6 +8,7 @@ class HabTelemetryLine : public Line
 {
     public:
         HabTelemetryLine();
+        ~HabTelemetryLine();
 };
 
 #endif // HABTELEMETRYLINE_HPP

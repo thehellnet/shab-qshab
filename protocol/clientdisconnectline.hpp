@@ -10,6 +10,7 @@ class ClientDisconnectLine : public Line
 {
     public:
         ClientDisconnectLine();
+        ~ClientDisconnectLine();
 
         QString getId() const;
         void setId(const QString& value);
