@@ -176,6 +176,7 @@ void ConfigWindow::load()
     ui->serverSyncBox->setChecked(config->getServerSyncEnable());
     ui->serverSyncAddressText->setText(config->getServerSyncAddress());
     ui->serverSyncPortText->setText(QString::number(config->getServerSyncPort()));
+    ui->serverSyncNameText->setText(config->getServerSyncName());
 
     ui->logRawCheckBox->setChecked(config->getLogRawEnable());
     ui->logRawPathText->setText(config->getLogRawPath());
@@ -199,6 +200,7 @@ void ConfigWindow::save()
     config->setServerSyncEnable(ui->serverSyncBox->isChecked());
     config->setServerSyncAddress(ui->serverSyncAddressText->text());
     config->setServerSyncPort(ui->serverSyncPortText->text().toUInt());
+    config->setServerSyncName(ui->serverSyncNameText->text());
 
     config->setLogRawEnable(ui->logRawCheckBox->isChecked());
     config->setLogRawPath(ui->logRawPathText->text());

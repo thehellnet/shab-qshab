@@ -1,7 +1,7 @@
 #ifndef CONFIGWINDOW_HPP
 #define CONFIGWINDOW_HPP
 
-#include <QDialog>
+#include <QtWidgets>
 
 #include "config/configuration.hpp"
 

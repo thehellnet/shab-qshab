@@ -81,3 +81,15 @@ quint16 Utility::checksum16(QString rawData)
 
     return (quint16) ret;
 }
+
+QString Utility::randomString(int length)
+{
+    QString randomString;
+
+    const QString possibleCharacters("abcdefghijklmnopqrstuvwxyz0123456789");
+
+    for(int i=0; i<length; ++i)
+        randomString.append(possibleCharacters.at(qrand() % possibleCharacters.length()));
+
+    return randomString;
+}

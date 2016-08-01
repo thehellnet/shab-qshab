@@ -59,6 +59,9 @@ class Configuration
         quint16 getServerSyncPort() const;
         void setServerSyncPort(const quint16& value);
 
+        QString getServerSyncName() const;
+        void setServerSyncName(const QString&value);
+
         bool getLogRawEnable() const;
         void setLogRawEnable(bool value);
 
@@ -90,6 +93,7 @@ class Configuration
         bool serverSyncEnable;
         QString serverSyncAddress;
         quint16 serverSyncPort;
+        QString serverSyncName;
 
         bool logRawEnable;
         QString logRawPath;

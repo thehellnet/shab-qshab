@@ -3,7 +3,8 @@
 #include <QString>
 #include <QtSerialPort/QtSerialPort>
 
-#include "configurationcontroller.hpp"
+#include "config/configurationcontroller.hpp"
+#include "utility.hpp"
 
 ConfigurationController::ConfigurationController()
 {
@@ -32,6 +33,7 @@ void ConfigurationController::loadConfig(Configuration* config)
     config->setServerSyncEnable(settings.value("enable", false).toBool());
     config->setServerSyncAddress(settings.value("address", "").toString());
     config->setServerSyncPort(settings.value("port", 12345).toUInt());
+    config->setServerSyncName(settings.value("name", Utility::randomString(8)).toString());
     settings.endGroup();
 
     settings.beginGroup("log");
@@ -64,6 +66,7 @@ void ConfigurationController::saveConfig(Configuration* config)
     settings.setValue("enable", config->getServerSyncEnable());
     settings.setValue("address", config->getServerSyncAddress());
     settings.setValue("port", config->getServerSyncPort());
+    settings.setValue("name", config->getServerSyncName());
     settings.endGroup();
 
     settings.beginGroup("log");

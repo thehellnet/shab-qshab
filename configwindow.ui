@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>247</height>
+    <width>493</width>
+    <height>255</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideNone</enum>
@@ -176,16 +176,16 @@
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
+         <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0">
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="serverSyncAddressText"/>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="serverSyncAddressLabel">
             <property name="text">
              <string>Address</string>
             </property>
            </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="serverSyncAddressText"/>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="serverSyncPortLabel">
@@ -197,12 +197,15 @@
           <item row="1" column="1">
            <widget class="QLineEdit" name="serverSyncPortText"/>
           </item>
-          <item row="2" column="1">
-           <widget class="QPushButton" name="serverSyncRestoreDefaultsButton">
+          <item row="2" column="0">
+           <widget class="QLabel" name="serverSyncNameLabel">
             <property name="text">
-             <string>Restore default values</string>
+             <string>Name</string>
             </property>
            </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="serverSyncNameText"/>
           </item>
          </layout>
         </widget>
@@ -321,7 +324,7 @@
   <tabstop>serverSyncBox</tabstop>
   <tabstop>serverSyncAddressText</tabstop>
   <tabstop>serverSyncPortText</tabstop>
-  <tabstop>serverSyncRestoreDefaultsButton</tabstop>
+  <tabstop>serverSyncNameText</tabstop>
   <tabstop>logRawCheckBox</tabstop>
   <tabstop>logRawPathText</tabstop>
   <tabstop>logRawPathButton</tabstop>

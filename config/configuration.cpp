@@ -187,6 +187,16 @@ void Configuration::setServerSyncPort(const quint16& value)
     serverSyncPort = value;
 }
 
+QString Configuration::getServerSyncName() const
+{
+    return serverSyncName;
+}
+
+void Configuration::setServerSyncName(const QString&value)
+{
+    serverSyncName = value;
+}
+
 bool Configuration::getLogRawEnable() const
 {
     return logRawEnable;
