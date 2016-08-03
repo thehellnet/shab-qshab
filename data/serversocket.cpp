@@ -13,6 +13,8 @@ void ServerSocket::start(QString address, quint16 port)
     if(socket != nullptr)
         return;
 
+    lastLine = "";
+
     socket = new QTcpSocket(this);
     socket->connectToHost(address, port);
     connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));

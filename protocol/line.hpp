@@ -1,13 +1,15 @@
-#ifndef MODEL_HPP
-#define MODEL_HPP
+#ifndef LINE_HPP
+#define LINE_HPP
 
 #include <QString>
 
-#include "command.hpp"
+#include "protocol/command.hpp"
 
 class Line
 {
     public:
+        virtual QString serialize();
+
         Command getCommand() const;
 
         QString getRawLine() const;
@@ -21,4 +23,4 @@ class Line
         QString rawLine;
 };
 
-#endif // MODEL_HPP
+#endif // LINE_HPP

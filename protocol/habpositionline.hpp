@@ -10,6 +10,8 @@ class HabPositionLine : public Line
         HabPositionLine();
         ~HabPositionLine();
 
+        QString serialize() override;
+
         float getLatitude() const;
         void setLatitude(float value);
 

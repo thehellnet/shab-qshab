@@ -12,6 +12,8 @@ class ClientDisconnectLine : public Line
         ClientDisconnectLine();
         ~ClientDisconnectLine();
 
+        QString serialize() override;
+
         QString getId() const;
         void setId(const QString& value);
 

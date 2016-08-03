@@ -1,6 +1,7 @@
 #include "datahandler.hpp"
 #include "protocol/lineparser.hpp"
 #include "protocol/protocolexception.hpp"
+#include "protocol/clientconnectline.hpp"
 
 DataHandler::DataHandler(QObject *parent) : QObject(parent)
 {
@@ -65,7 +66,10 @@ void DataHandler::handleNewLine(QString strLine)
 void DataHandler::handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState)
 {
     if(socketState == QAbstractSocket::ConnectedState) {
-
+        ClientConnectLine ccLine;
+        ccLine.setId("");
+        ccLine.setName(config->getServerSyncName());
+        serverSocket->writeLine(ccLine.serialize());
     }
 
     emit newSocketState(socketState);

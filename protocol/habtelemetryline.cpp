@@ -9,3 +9,8 @@ HabTelemetryLine::~HabTelemetryLine()
 {
 
 }
+
+QString HabTelemetryLine::serialize()
+{
+    return QString("HT|");
+}

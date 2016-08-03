@@ -10,6 +10,12 @@ ClientDisconnectLine::~ClientDisconnectLine()
 
 }
 
+QString ClientDisconnectLine::serialize()
+{
+    QString("CD|%1")
+            .arg(id);
+}
+
 QString ClientDisconnectLine::getId() const
 {
     return id;

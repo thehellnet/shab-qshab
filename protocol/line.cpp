@@ -1,8 +1,13 @@
-#include "line.hpp"
+#include "protocol/line.hpp"
 
 Line::Line(Command command)
 {
     this->command = command;
+}
+
+QString Line::serialize()
+{
+    return "";
 }
 
 QString Line::getRawLine() const

@@ -10,6 +10,8 @@ class ClientUpdateLine : public Line
         ClientUpdateLine();
         ~ClientUpdateLine();
 
+        QString serialize() override;
+
         float getLatitude() const;
         void setLatitude(float value);
 

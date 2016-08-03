@@ -12,6 +12,8 @@ class HabImageLine : public Line
         HabImageLine();
         ~HabImageLine();
 
+        QString serialize() override;
+
         int getSliceTot() const;
         void setSliceTot(int value);
 

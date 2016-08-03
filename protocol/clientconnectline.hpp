@@ -12,6 +12,8 @@ class ClientConnectLine : public Line
         ClientConnectLine();
         ~ClientConnectLine();
 
+        QString serialize() override;
+
         QString getId() const;
         void setId(const QString& value);
 

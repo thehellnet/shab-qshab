@@ -10,6 +10,14 @@ ClientUpdateLine::~ClientUpdateLine()
 
 }
 
+QString ClientUpdateLine::serialize()
+{
+    return QString("CU|%1|%2|%3")
+            .arg(latitude)
+            .arg(longitude)
+            .arg(altitude);
+}
+
 float ClientUpdateLine::getLatitude() const
 {
     return latitude;

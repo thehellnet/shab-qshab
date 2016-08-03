@@ -3,7 +3,6 @@
 
 #include <QString>
 
-#include "protocol/lineparser.hpp"
 #include "protocol/line.hpp"
 #include "protocol/habpositionline.hpp"
 #include "protocol/habimageline.hpp"
