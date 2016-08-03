@@ -12,11 +12,22 @@ ClientUpdateLine::~ClientUpdateLine()
 
 QString ClientUpdateLine::serialize()
 {
-    rawLine = QString("CU|%1|%2|%3")
+    rawLine = QString("CU|%1|%2|%3|%4")
+            .arg(id)
             .arg(latitude)
             .arg(longitude)
             .arg(altitude);
     return rawLine;
+}
+
+QString ClientUpdateLine::getId() const
+{
+    return id;
+}
+
+void ClientUpdateLine::setId(const QString&value)
+{
+    id = value;
 }
 
 float ClientUpdateLine::getLatitude() const

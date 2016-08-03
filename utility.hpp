@@ -11,6 +11,7 @@ class Utility
 
         static QString serialPortParams(QSerialPort::DataBits dataBits, QSerialPort::Parity parity, QSerialPort::StopBits stopBits);
         static quint16 checksum16(QString rawData);
+        static QString addChecksum(QString rawLine);
         static QString randomString(int length);
         static QString getMachineId();
 };

@@ -12,6 +12,9 @@ class ClientUpdateLine : public Line
 
         QString serialize() override;
 
+        QString getId() const;
+        void setId(const QString&value);
+
         float getLatitude() const;
         void setLatitude(float value);
 
@@ -22,6 +25,7 @@ class ClientUpdateLine : public Line
         void setAltitude(float value);
 
     private:
+        QString id;
         float latitude;
         float longitude;
         float altitude;

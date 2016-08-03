@@ -70,7 +70,7 @@ void DataHandler::handleServerSyncSocketEvent(QAbstractSocket::SocketState socke
         ClientConnectLine ccLine;
         ccLine.setId(Utility::getMachineId());
         ccLine.setName(config->getServerSyncName());
-        serverSocket->writeLine(ccLine.serialize());
+        serverSocket->writeLine(Utility::addChecksum(ccLine.serialize()));
         emit newLine(ccLine);
     }
 

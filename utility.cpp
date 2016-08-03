@@ -1,5 +1,6 @@
 #include <QSerialPort>
 #include <QCryptographicHash>
+#include <QChar>
 
 #include "utility.hpp"
 
@@ -81,6 +82,11 @@ quint16 Utility::checksum16(QString rawData)
     }
 
     return (quint16) ret;
+}
+
+QString Utility::addChecksum(QString rawLine)
+{
+    return QString("%1|%2").arg(checksum16(rawLine), 4, 16, QChar('0')).arg(rawLine);
 }
 
 QString Utility::randomString(int length)

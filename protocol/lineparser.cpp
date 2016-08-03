@@ -17,7 +17,7 @@ Line LineParser::parseLine(QString rawLine)
     rawLine = rawLine.simplified();
     QStringList items = rawLine.split('|');
 
-    if(Utility::checksum16(rawLine.right(5)) != items[0].toUInt(nullptr, 16))
+    if(Utility::checksum16(rawLine.mid(5)) != items[0].toUInt(nullptr, 16))
         throw ProtocolException();
 
     if(items[1] == "HP") return parseHabPosition(rawLine, items);
@@ -33,35 +33,35 @@ Line LineParser::parseLine(QString rawLine)
 HabPositionLine LineParser::parseHabPosition(QString rawLine, QStringList items)
 {
     // 0000|HP|latitude|longitude|altitude
-    if(items.size() != 4 || items[2] != "HP")
+    if(items.size() != 5 || items[1] != "HP")
         throw ProtocolException();
 
     HabPositionLine line;
     line.setRawLine(rawLine);
-    line.setLatitude(items[3].toFloat());
-    line.setLongitude(items[4].toFloat());
-    line.setAltitude(items[5].toFloat());
+    line.setLatitude(items[2].toFloat());
+    line.setLongitude(items[3].toFloat());
+    line.setAltitude(items[4].toFloat());
     return line;
 }
 
 HabImageLine LineParser::parseHabImage(QString rawLine, QStringList items)
 {
     // 0000|HI|slicenum|slicetot|base64data
-    if(items.size() != 5 || items[2] != "HI")
+    if(items.size() != 5 || items[1] != "HI")
         throw ProtocolException();
 
     HabImageLine line;
     line.setRawLine(rawLine);
-    line.setSliceTot(items[3].toInt());
-    line.setSliceNum(items[4].toInt());
-    line.setData(QByteArray::fromBase64(items[5].toLatin1()));
+    line.setSliceTot(items[2].toInt());
+    line.setSliceNum(items[3].toInt());
+    line.setData(QByteArray::fromBase64(items[4].toLatin1()));
     return line;
 }
 
 HabTelemetryLine LineParser::parseHabTelemetry(QString rawLine, QStringList items)
 {
     // 0000|HT|
-    if(items.size() != 4 || items[2] != "HT")
+    if(items.size() != 2 || items[1] != "HT")
         throw ProtocolException();
 
     HabTelemetryLine line;
@@ -72,24 +72,25 @@ HabTelemetryLine LineParser::parseHabTelemetry(QString rawLine, QStringList item
 ClientConnectLine LineParser::parseClientConnect(QString rawLine, QStringList items)
 {
     // 0000|CC|id|name
-    if(items.size() != 4 || items[2] != "CC")
+    if(items.size() != 4 || items[1] != "CC")
         throw ProtocolException();
 
     ClientConnectLine line;
     line.setRawLine(rawLine);
-    line.setId(items[3]);
-    line.setName(items[4]);
+    line.setId(items[2]);
+    line.setName(items[3]);
     return line;
 }
 
 ClientUpdateLine LineParser::parseClientUpdate(QString rawLine, QStringList items)
 {
-    // 0000|CU|latitude|longitude|altitude
-    if(items.size() != 5 || items[2] != "CU")
+    // 0000|CU|id|latitude|longitude|altitude
+    if(items.size() != 6 || items[1] != "CU")
         throw ProtocolException();
 
     ClientUpdateLine line;
     line.setRawLine(rawLine);
+    line.setId(items[2]);
     line.setLatitude(items[3].toFloat());
     line.setLongitude(items[4].toFloat());
     line.setAltitude(items[5].toFloat());
@@ -99,11 +100,11 @@ ClientUpdateLine LineParser::parseClientUpdate(QString rawLine, QStringList item
 ClientDisconnectLine LineParser::parseClientDisconnect(QString rawLine, QStringList items)
 {
     // 0000|CD|id
-    if(items.size() != 3 || items[2] != "CD")
+    if(items.size() != 3 || items[1] != "CD")
         throw ProtocolException();
 
     ClientDisconnectLine line;
     line.setRawLine(rawLine);
-    line.setId(items[3]);
+    line.setId(items[2]);
     return line;
 }
