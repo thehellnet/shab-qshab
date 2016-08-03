@@ -1,4 +1,5 @@
 #include "datahandler.hpp"
+#include "utility.hpp"
 #include "protocol/lineparser.hpp"
 #include "protocol/protocolexception.hpp"
 #include "protocol/clientconnectline.hpp"
@@ -67,9 +68,10 @@ void DataHandler::handleServerSyncSocketEvent(QAbstractSocket::SocketState socke
 {
     if(socketState == QAbstractSocket::ConnectedState) {
         ClientConnectLine ccLine;
-        ccLine.setId("");
+        ccLine.setId(Utility::getMachineId());
         ccLine.setName(config->getServerSyncName());
         serverSocket->writeLine(ccLine.serialize());
+        emit newLine(ccLine);
     }
 
     emit newSocketState(socketState);

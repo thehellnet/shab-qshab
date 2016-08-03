@@ -1,4 +1,5 @@
 #include <QSerialPort>
+#include <QCryptographicHash>
 
 #include "utility.hpp"
 
@@ -92,4 +93,24 @@ QString Utility::randomString(int length)
         randomString.append(possibleCharacters.at(qrand() % possibleCharacters.length()));
 
     return randomString;
+}
+
+QString Utility::getMachineId()
+{
+    QString data = randomString(16)
+                   + QSysInfo::buildAbi()
+                   + QSysInfo::buildCpuArchitecture()
+                   + QSysInfo::currentCpuArchitecture()
+                   + QSysInfo::kernelType()
+                   + QSysInfo::kernelVersion()
+                   + QString(QSysInfo::macVersion())
+                   + QSysInfo::machineHostName()
+                   + QSysInfo::prettyProductName()
+                   + QSysInfo::productType()
+                   + QSysInfo::productVersion()
+                   + QString(QSysInfo::windowsVersion());
+
+    return QCryptographicHash::hash(data.toLatin1(), QCryptographicHash::Sha512)
+            .toHex()
+            .left(16);
 }

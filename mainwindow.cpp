@@ -186,7 +186,7 @@ void MainWindow::handleServerSyncSocketEvent(QAbstractSocket::SocketState socket
 void MainWindow::appendLogLine(QString line)
 {
     QTextEdit* logText = ui->logText;
-    logText->append(line + "\n");
+    logText->append(line.simplified());
 
     QTextCursor cursor = logText->textCursor();
 

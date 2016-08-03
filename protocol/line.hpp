@@ -16,11 +16,12 @@ class Line
         void setRawLine(const QString& value);
 
     protected:
+        QString rawLine;
+
         Line(Command command);
 
     private:
         Command command;
-        QString rawLine;
 };
 
 #endif // LINE_HPP

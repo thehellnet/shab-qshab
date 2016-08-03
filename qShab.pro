@@ -28,8 +28,7 @@ SOURCES += main.cpp \
     protocol/clientdisconnectline.cpp \
     data/datahandler.cpp \
     data/serversocket.cpp \
-    protocol/protocolexception.cpp \
-    protocol/lineserializer.cpp
+    protocol/protocolexception.cpp
 
 HEADERS  += mainwindow.hpp \
     configwindow.hpp \
@@ -48,8 +47,7 @@ HEADERS  += mainwindow.hpp \
     protocol/clientdisconnectline.hpp \
     data/datahandler.hpp \
     data/serversocket.hpp \
-    protocol/protocolexception.hpp \
-    protocol/lineserializer.hpp
+    protocol/protocolexception.hpp
 
 FORMS    += mainwindow.ui \
     configwindow.ui

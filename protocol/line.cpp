@@ -7,7 +7,8 @@ Line::Line(Command command)
 
 QString Line::serialize()
 {
-    return "";
+    rawLine = "";
+    return rawLine;
 }
 
 QString Line::getRawLine() const

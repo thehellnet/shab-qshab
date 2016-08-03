@@ -14,6 +14,7 @@ LineParser::LineParser()
 
 Line LineParser::parseLine(QString rawLine)
 {
+    rawLine = rawLine.simplified();
     QStringList items = rawLine.split('|');
 
     if(Utility::checksum16(rawLine.right(5)) != items[0].toUInt(nullptr, 16))

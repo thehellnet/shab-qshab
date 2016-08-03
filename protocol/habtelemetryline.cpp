@@ -12,5 +12,6 @@ HabTelemetryLine::~HabTelemetryLine()
 
 QString HabTelemetryLine::serialize()
 {
-    return QString("HT|");
+    rawLine = QString("HT|");
+    return rawLine;
 }

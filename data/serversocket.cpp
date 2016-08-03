@@ -42,11 +42,13 @@ void ServerSocket::writeLine(QString line)
     if(socket == nullptr || !socket->isOpen())
         return;
 
+    line = line.simplified();
     if(line == lastLine)
         return;
 
     lastLine = line;
 
+    line += "\n";
     socket->write(line.toLatin1());
 }
 
@@ -56,7 +58,7 @@ void ServerSocket::readData()
         return;
 
     QByteArray rawData = socket->readLine();
-    QString line = QString(rawData);
+    QString line = QString(rawData).simplified();
 
     if(line == lastLine)
         return;
