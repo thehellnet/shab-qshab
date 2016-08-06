@@ -86,7 +86,8 @@ quint16 Utility::checksum16(QString rawData)
 
 QString Utility::addChecksum(QString rawLine)
 {
-    return QString("%1|%2").arg(checksum16(rawLine), 4, 16, QChar('0')).arg(rawLine);
+    QString strChecksum = QString("%1").arg(checksum16(rawLine), 4, 16, QChar('0')).toUpper();
+    return QString("%1|%2").arg(strChecksum, rawLine);
 }
 
 QString Utility::randomString(int length)

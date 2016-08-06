@@ -17,7 +17,8 @@ Line LineParser::parseLine(QString rawLine)
     rawLine = rawLine.simplified();
     QStringList items = rawLine.split('|');
 
-    if(Utility::checksum16(rawLine.mid(5)) != items[0].toUInt(nullptr, 16))
+    if(Utility::checksum16(rawLine.mid(5)) != items[0].toUInt(nullptr, 16)
+            || items.count() < 2)
         throw ProtocolException();
 
     if(items[1] == "HP") return parseHabPosition(rawLine, items);
