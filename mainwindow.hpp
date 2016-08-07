@@ -4,11 +4,13 @@
 #include <QMainWindow>
 #include <QWebEngineView>
 #include <QStatusBar>
+#include <QTableWidget>
 
 #include "data/datahandler.hpp"
 #include "config/configuration.hpp"
 #include "configwindow.hpp"
 #include "statusbarwidgets.hpp"
+#include "datalogger.hpp"
 
 namespace Ui {
     class MainWindow;
@@ -28,14 +30,16 @@ class MainWindow : public QMainWindow
         DataHandler* dataHandler;
         ConfigWindow* configWindow;
         StatusBarWidgets* statusBarWidgets;
+        DataLogger* dataLogger;
+        QTableWidget* clientsTable;
 
         QStatusBar* statusBar;
         QWebEngineView* webView;
 
         void initWebView();
         void initStatusBar();
+        void initClientsTable();
         void showStatusBarMessage(QString message, int timeout = 3000);
-        void appendLogLine(QString line);
 
     private slots:
         void applicationExit();
@@ -47,6 +51,9 @@ class MainWindow : public QMainWindow
         void toogleServerSync();
         void newLine(Line line);
         void handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState);
+        void appendLogLine(QString line);
+        void imageSaved(QString imageName);
+        void updateClientsTable();
 };
 
 #endif // MAINWINDOW_HPP

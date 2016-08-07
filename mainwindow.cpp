@@ -3,6 +3,7 @@
 #include <QUrl>
 #include <QTextEdit>
 #include <QTextCursor>
+#include <QTableWidgetItem>
 
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
@@ -15,21 +16,33 @@ MainWindow::MainWindow(QWidget *parent) :
 
     config = Configuration::getInstance();
 
-    dataHandler = new DataHandler(this);
-    connect(dataHandler, SIGNAL(newLine(Line)), this, SLOT(newLine(Line)));
-    connect(dataHandler, SIGNAL(newSocketState(QAbstractSocket::SocketState)), this, SLOT(handleServerSyncSocketEvent(QAbstractSocket::SocketState)));
-
     configWindow = new ConfigWindow(this);
+    dataHandler = new DataHandler(this);
+    statusBarWidgets = new StatusBarWidgets(this);
+    dataLogger = new DataLogger(this);
+
+    clientsTable = ui->clientsTable;
+    statusBar = ui->statusBar;
+    webView = ui->webView;
+
+    initClientsTable();
+
+    connect(dataHandler, SIGNAL(newLine(Line)), this, SLOT(newLine(Line)));
+    connect(dataHandler, SIGNAL(newLine(QString)), this, SLOT(appendLogLine(QString)));
+    connect(dataHandler, SIGNAL(newSocketState(QAbstractSocket::SocketState)), this, SLOT(handleServerSyncSocketEvent(QAbstractSocket::SocketState)));
+    connect(dataHandler, SIGNAL(updateClientsList()), this, SLOT(updateClientsTable()));
+
     configWindow->setModal(true);
     connect(configWindow, SIGNAL(configurationChanged()), this, SLOT(configurationChanged()));
+    connect(configWindow, SIGNAL(configurationChanged()), dataHandler, SLOT(updateLocalClient()));
 
-    statusBarWidgets = new StatusBarWidgets(this);
     statusBarWidgets->updateFromConfig();
 
-    statusBar = ui->statusBar;
+    connect(dataHandler, SIGNAL(newLine(QString)), dataLogger, SLOT(saveLine(QString)));
+    connect(dataLogger, SIGNAL(imageSaved(QString)), this, SLOT(imageSaved(QString)));
+
     initStatusBar();
 
-    webView = ui->webView;
     initWebView();
 
     connect(ui->actionFileExit, SIGNAL(triggered(bool)), this, SLOT(applicationExit()));
@@ -44,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete dataLogger;
     delete statusBarWidgets;
     delete configWindow;
     delete dataHandler;
@@ -71,6 +85,16 @@ void MainWindow::initStatusBar()
     statusBar->addPermanentWidget(statusBarWidgets->localGpsSerial);
     statusBar->addPermanentWidget(statusBarWidgets->habSerial);
     statusBar->addPermanentWidget(statusBarWidgets->time);
+}
+
+void MainWindow::initClientsTable()
+{
+    clientsTable->setColumnCount(2);
+
+    QStringList labels;
+    labels.append("ID");
+    labels.append("Name");
+    clientsTable->setHorizontalHeaderLabels(labels);
 }
 
 void MainWindow::applicationExit()
@@ -202,5 +226,30 @@ void MainWindow::appendLogLine(QString line)
 
 void MainWindow::newLine(Line line)
 {
-    appendLogLine(line.getRawLine());
+
+}
+
+void MainWindow::imageSaved(QString imageName)
+{
+    QString message = "Image saved: " + imageName;
+    showStatusBarMessage(message);
+}
+
+void MainWindow::updateClientsTable()
+{
+    QList<Client*>* clients = dataHandler->getClients();
+
+    clientsTable->clearContents();
+    clientsTable->setRowCount(clients->count());
+
+    for(int i = 0; i < clients->count(); i++) {
+        QTableWidgetItem* idItem = new QTableWidgetItem();
+        idItem->setText(clients->at(i)->getId());
+        QTableWidgetItem* nameItem = new QTableWidgetItem();
+        nameItem->setText(clients->at(i)->getName());
+        clientsTable->setItem(i, 0, idItem);
+        clientsTable->setItem(i, 1, nameItem);
+    }
+
+    clientsTable->resizeColumnsToContents();
 }

@@ -8,10 +8,10 @@
 class Line
 {
     public:
+        virtual ~Line();
         virtual QString serialize();
 
         Command getCommand() const;
-
         QString getRawLine() const;
         void setRawLine(const QString& value);
 

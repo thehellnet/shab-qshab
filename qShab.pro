@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network serialport webengine webenginewidgets
+QT       += core gui network serialport positioning webengine webenginewidgets
 
 TARGET = qShab
 TEMPLATE = app
@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     protocol/clientdisconnectline.cpp \
     data/datahandler.cpp \
     data/serversocket.cpp \
-    protocol/protocolexception.cpp
+    datalogger.cpp \
+    protocol/client.cpp
 
 HEADERS  += mainwindow.hpp \
     configwindow.hpp \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.hpp \
     protocol/clientdisconnectline.hpp \
     data/datahandler.hpp \
     data/serversocket.hpp \
-    protocol/protocolexception.hpp
+    datalogger.hpp \
+    protocol/client.hpp
 
 FORMS    += mainwindow.ui \
     configwindow.ui

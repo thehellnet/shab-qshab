@@ -5,6 +5,11 @@ Line::Line(Command command)
     this->command = command;
 }
 
+Line::~Line()
+{
+
+}
+
 QString Line::serialize()
 {
     rawLine = "";
