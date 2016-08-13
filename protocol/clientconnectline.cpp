@@ -12,10 +12,9 @@ ClientConnectLine::~ClientConnectLine()
 
 QString ClientConnectLine::serialize()
 {
-    rawLine = QString("CC|%1|%2")
+    return QString("CC|%1|%2")
               .arg(id)
               .arg(name);
-    return rawLine;
 }
 
 QString ClientConnectLine::getId() const

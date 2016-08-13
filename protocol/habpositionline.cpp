@@ -12,11 +12,10 @@ HabPositionLine::~HabPositionLine()
 
 QString HabPositionLine::serialize()
 {
-    rawLine = QString("HP|%1|%2|%3")
+    return QString("HP|%1|%2|%3")
             .arg(latitude)
             .arg(longitude)
             .arg(altitude);
-    return rawLine;
 }
 
 float HabPositionLine::getLatitude() const

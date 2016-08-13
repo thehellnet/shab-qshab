@@ -41,6 +41,10 @@ class MainWindow : public QMainWindow
         void initClientsTable();
         void showStatusBarMessage(QString message, int timeout = 3000);
 
+        void mapExecJS(QString jsCode);
+        void mapHabUpdate(double latitude, double longitude);
+        void mapHabRemove();
+
     private slots:
         void applicationExit();
         void showConfigWindow();
@@ -49,13 +53,16 @@ class MainWindow : public QMainWindow
         void toogleHab();
         void toogleLocalGps();
         void toogleServerSync();
-        void newLine(Line line);
+        void toogleMapAutoBoundsAndZoom();
         void handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState);
         void appendLogLine(QString line);
         void imageSaved(QString imageName);
         void updateClientsTable();
-        void updateClient(Client* client);
+        void removeAllRemoteClients();
         void updateLocalClient(Client* client);
+        void addRemoteClient(Client* client);
+        void updateRemoteClient(Client* client);
+        void removeRemoteClient(Client* client);
 };
 
 #endif // MAINWINDOW_HPP

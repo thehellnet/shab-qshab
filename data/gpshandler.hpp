@@ -18,7 +18,10 @@ class GPSHandler : public QObject
         void start();
         void stop();
 
+        bool isRunning() const;
+
     private:
+        bool running;
         Configuration* config;
         QNmeaPositionInfoSource* source;
         QSerialPort* serial;

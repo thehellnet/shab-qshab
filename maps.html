@@ -1,114 +1,223 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>Simple Map</title>
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-        <meta charset="utf-8">
-        <style>
-            html, body, #map-canvas {
-                height: 100%;
-                margin: 0px;
-                padding: 0px
+<head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+        html, body, #map-canvas {
+            height: 100%;
+            margin: 0;
+            padding: 0
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?language=en&amp;region=IT&amp;key=AIzaSyDgUNMSglhkTLRC4jsxmOURa_3lNisIoPg"></script>
+    <script>
+        function Client(id, name) {
+            this.id = id;
+            this.name = name;
+            this.marker = undefined;
+        }
+
+        var DEFAULT_POSITION = new google.maps.LatLng(39.44510959999999, 9.540954499999998);
+        var map = undefined;
+        var clients = {};
+
+        var infoWindow = new google.maps.InfoWindow({
+            content: ""
+        });
+
+        var markerHab = undefined;
+        var markerLocal = undefined;
+
+        var forceBounds = false;
+
+        var mapOptions = {
+            zoom: 13,
+            maxZoom: 19,
+            center: DEFAULT_POSITION,
+            panControl: true,
+            zoomControl: true,
+            scaleControl: true,
+            rotateControl: true,
+            mapTypeControl: true,
+            streetViewControl: false,
+            overviewMapControl: true,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        };
+
+        function setAutoBounds(status) {
+            forceBounds = status;
+
+            if (status) {
+                updateBounds();
             }
-        </style>
-        <script src="https://maps.googleapis.com/maps/api/js?sensor=false&amp;language=en&amp;region=IT&amp;key=AIzaSyDgUNMSglhkTLRC4jsxmOURa_3lNisIoPg"></script>
-        <script>
-            var map = undefined;
-            var default_position = new google.maps.LatLng(39.44510959999999,9.540954499999998);
+        }
 
-            var infowindow = undefined;
-
-            var hab_marker = undefined;
-            var local_marker = undefined;
-
-            var mapOptions = {
-                zoom: 13,
-                maxZoom: 13,
-                center: default_position,
-                panControl: true,
-                zoomControl: true,
-                scaleControl: true,
-                rotateControl: true,
-                mapTypeControl: true,
-                streetViewControl: false,
-                overviewMapControl: true,
-                mapTypeId: google.maps.MapTypeId.SATELLITE
-            };
-
-            function updateBounds() {
-                var bounds = new google.maps.LatLngBounds();
-
-                if(hab_marker != undefined)
-                    bounds.extend(hab_marker.getPosition());
-
-                if(local_marker != undefined)
-                    bounds.extend(local_marker.getPosition());
-
-                if((hab_marker == undefined) && (local_marker == undefined))
-                    bounds.extend(default_position);
-
-                map.fitBounds(bounds);
+        function updateBounds() {
+            if (!forceBounds) {
+                console.log("Auto Bounds disabled");
+                return;
             }
 
-            function updateHab(lat, lon) {
-                var position = new google.maps.LatLng(lat, lon);
+            var bounds = new google.maps.LatLngBounds();
+            var useDefault = true;
 
-                if(hab_marker == undefined) {
-                    hab_marker = new google.maps.Marker({
-                        position: position,
-                        map: map,
-                        icon: "http://maps.google.com/mapfiles/kml/paddle/red-circle.png",
-                        title: "HAB"
-                    });
+            if (markerHab != undefined) {
+                console.log("HAB Marker");
+                bounds.extend(markerHab.getPosition());
+                useDefault = false;
+            }
+
+            if (markerLocal != undefined) {
+                console.log("Local marker");
+                bounds.extend(markerLocal.getPosition());
+                useDefault = false;
+            }
+
+            for (var key in clients) {
+                if (clients.hasOwnProperty(key)) {
+                    var client = clients[key];
+                    console.log(client);
+                    if (client == undefined || client.marker == undefined) {
+                        continue;
+                    }
+
+                    bounds.extend(client.marker.position);
+                    useDefault = false;
+                    console.log("Remote client " + client.id);
                 }
-
-                hab_marker.setPosition(position);
-
-                updateBounds();
             }
 
-            function updateLocal(lat, lon) {
-                var position = new google.maps.LatLng(lat, lon);
+            if (useDefault) {
+                console.log("Using default");
+                bounds.extend(DEFAULT_POSITION);
+            }
 
-                if(local_marker == undefined) {
-                    local_marker = new google.maps.Marker({
-                        position: position,
-                        map: map,
-                        icon: "http://maps.google.com/mapfiles/kml/paddle/grn-stars.png",
-                        title: "LOC"
-                    });
+            map.fitBounds(bounds);
+        }
+
+        function updateHab(lat, lon) {
+            var position = new google.maps.LatLng(lat, lon);
+
+            if (markerHab == undefined) {
+                markerHab = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    icon: "https://maps.google.com/mapfiles/kml/paddle/red-circle.png",
+                    title: "HAB"
+                });
+                google.maps.event.addListener(markerHab, "click", function () {
+                    infoWindow.setContent(markerHab.title);
+                    infoWindow.open(map, markerHab);
+                });
+            }
+
+            markerHab.setPosition(position);
+
+            updateBounds();
+        }
+
+        function updateLocal(lat, lon) {
+            var position = new google.maps.LatLng(lat, lon);
+
+            if (markerLocal == undefined) {
+                markerLocal = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    icon: "https://maps.google.com/mapfiles/kml/paddle/grn-stars.png",
+                    title: "LOCAL"
+                });
+                google.maps.event.addListener(markerLocal, "click", function () {
+                    infoWindow.setContent(markerLocal.title);
+                    infoWindow.open(map, markerLocal);
+                });
+            } else {
+                markerLocal.setPosition(position);
+            }
+            updateBounds();
+        }
+
+        function removeHab() {
+            markerHab.setMap(null);
+            markerHab = undefined;
+            updateBounds();
+        }
+
+        function removeLocal() {
+            markerLocal.setMap(null);
+            markerLocal = undefined;
+            updateBounds();
+        }
+
+        function addRemoteClient(id, name) {
+            console.log("addRemoteClient");
+            clients[id] = new Client(id, name);
+        }
+
+        function updateRemoteClient(id, latitude, longitude) {
+            console.log("updateRemoteClient");
+
+            if (clients[id] == undefined) {
+                return;
+            }
+
+            var position = new google.maps.LatLng(latitude, longitude);
+
+            if (clients[id].marker == undefined) {
+                clients[id].marker = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    icon: "https://maps.google.com/mapfiles/kml/paddle/ylw-stars.png",
+                    title: clients[id].name
+                });
+                google.maps.event.addListener(clients[id].marker, "click", function () {
+                    infoWindow.setContent(clients[id].marker.title);
+                    infoWindow.open(map, clients[id].marker);
+                });
+
+            } else {
+                clients[id].marker.setPosition(position);
+            }
+
+            updateBounds();
+        }
+
+        function removeRemoteClient(id) {
+            console.log("removeRemoteClient");
+
+            clients[id].marker.setMap(null);
+            clients[id].marker = undefined;
+            clients[id] = undefined;
+        }
+
+        function removeAllRemoteClients() {
+            for (var key in clients) {
+                if (clients.hasOwnProperty(key)) {
+                    if (clients[key] == undefined || clients[key].marker == undefined) {
+                        continue;
+                    }
+
+                    clients[key].marker.setMap(null);
+                    clients[key].marker = undefined;
+                    clients[key] = undefined;
                 }
-
-                local_marker.setPosition(position);
-
-                updateBounds();
             }
+        }
 
-            function removeHab() {
-                hab_marker.setMap(null);
-                hab_marker = undefined;
-                updateBounds();
-            }
+        function initialize() {
+            map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-            function removeLocal() {
-                local_marker.setMap(null);
-                local_marker = undefined;
-                updateBounds();
-            }
+            infoWindow = new google.maps.InfoWindow();
+        }
 
-            function initialize() {
-                map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        google.maps.event.addDomListener(window, "load", initialize);
+    </script>
+</head>
 
-                infowindow = new google.maps.InfoWindow();
-            }
-
-            google.maps.event.addDomListener(window, "load", initialize);
-        </script>
-    </head>
-
-    <body>
-        <div id="map-canvas"></div>
-    </body>
+<body>
+<div id="map-canvas"></div>
+</body>
 
 </html>

@@ -12,18 +12,7 @@ Line::~Line()
 
 QString Line::serialize()
 {
-    rawLine = "";
-    return rawLine;
-}
-
-QString Line::getRawLine() const
-{
-    return rawLine;
-}
-
-void Line::setRawLine(const QString& value)
-{
-    rawLine = value;
+    return "";
 }
 
 Command Line::getCommand() const

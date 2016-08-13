@@ -12,11 +12,10 @@ HabImageLine::~HabImageLine()
 
 QString HabImageLine::serialize()
 {
-    rawLine = QString("HI|%1|%2|%3")
+    return QString("HI|%1|%2|%3")
             .arg(sliceTot)
             .arg(sliceNum)
             .arg(QString(data.toBase64()));
-    return rawLine;
 }
 
 int HabImageLine::getSliceTot() const

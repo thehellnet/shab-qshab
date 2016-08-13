@@ -96,7 +96,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
         <item>
@@ -194,13 +194,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QTextEdit" name="logText">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+       <widget class="QPlainTextEdit" name="logText">
         <property name="maximumSize">
          <size>
           <width>16777215</width>
@@ -209,29 +203,22 @@
         </property>
         <property name="font">
          <font>
-          <family>Liberation Mono</family>
+          <family>Monospace</family>
+          <pointsize>9</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOn</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
         </property>
-        <property name="lineWrapMode">
-         <enum>QTextEdit::NoWrap</enum>
-        </property>
         <property name="readOnly">
          <bool>true</bool>
         </property>
-        <property name="acceptRichText">
-         <bool>false</bool>
-        </property>
         <property name="textInteractionFlags">
          <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+        <property name="maximumBlockCount">
+         <number>0</number>
         </property>
        </widget>
       </item>
@@ -263,6 +250,8 @@
     <addaction name="actionStatusHAB"/>
     <addaction name="actionStatusLocalGPS"/>
     <addaction name="actionStatusServerSync"/>
+    <addaction name="separator"/>
+    <addaction name="actionStatusMapAuto"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -359,6 +348,17 @@
    </property>
    <property name="text">
     <string>Enable &amp;Server Sync</string>
+   </property>
+  </action>
+  <action name="actionStatusMapAuto">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Map &amp;automatic bounds and zoom</string>
    </property>
   </action>
  </widget>

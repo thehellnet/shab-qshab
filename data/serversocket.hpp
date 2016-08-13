@@ -12,7 +12,10 @@ class ServerSocket : public QObject
     public:
         explicit ServerSocket(QObject *parent = 0);
 
+        bool isRunning() const;
+
     private:
+        bool running;
         QTcpSocket* socket;
         QString lastLine;
 

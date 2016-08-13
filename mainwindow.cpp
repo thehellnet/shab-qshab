@@ -1,7 +1,7 @@
 #include <QWebEngineSettings>
 #include <QFile>
 #include <QUrl>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QTextCursor>
 #include <QTableWidgetItem>
 
@@ -31,8 +31,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(dataHandler, SIGNAL(newLine(QString)), this, SLOT(appendLogLine(QString)));
     connect(dataHandler, SIGNAL(newSocketState(QAbstractSocket::SocketState)), this, SLOT(handleServerSyncSocketEvent(QAbstractSocket::SocketState)));
     connect(dataHandler, SIGNAL(updateClientsList()), this, SLOT(updateClientsTable()));
-    connect(dataHandler, SIGNAL(updateClient(Client*)), this, SLOT(updateClient(Client*)));
+    connect(dataHandler, SIGNAL(removeAllRemoteClients()), this, SLOT(removeAllRemoteClients()));
     connect(dataHandler, SIGNAL(updateLocalClient(Client*)), this, SLOT(updateLocalClient(Client*)));
+
+    connect(dataHandler, SIGNAL(addRemoteClient(Client*)), this, SLOT(addRemoteClient(Client*)));
+    connect(dataHandler, SIGNAL(updateRemoteClient(Client*)), this, SLOT(updateRemoteClient(Client*)));
+    connect(dataHandler, SIGNAL(removeRemoteClient(Client*)), this, SLOT(removeRemoteClient(Client*)));
 
     configWindow->setModal(true);
     connect(configWindow, SIGNAL(configurationChanged()), this, SLOT(configurationChanged()));
@@ -54,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionStatusLocalGPS, SIGNAL(triggered(bool)), this, SLOT(toogleLocalGps()));
     connect(ui->actionStatusServerSync, SIGNAL(triggered(bool)), this, SLOT(toogleServerSync()));
 
+    connect(ui->actionStatusMapAuto, SIGNAL(triggered(bool)), this, SLOT(toogleMapAutoBoundsAndZoom()));
+
     updateActionEnableStatus();
 }
 
@@ -68,6 +74,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::initWebView()
 {
+#ifdef QT_DEBUG
+    qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "9000");
+#endif
+
     QWebEngineSettings* settings = webView->settings();
     settings->setAttribute(QWebEngineSettings::AutoLoadImages, true);
     settings->setAttribute(QWebEngineSettings::JavascriptEnabled, true);
@@ -166,6 +176,9 @@ void MainWindow::toogleLocalGps()
     else
         showStatusBarMessage("Local GPS stop");
 
+    if(!status)
+        mapExecJS("removeLocal();");
+
     statusBarWidgets->updateFromConfig();
 }
 
@@ -187,6 +200,17 @@ void MainWindow::toogleServerSync()
         showStatusBarMessage("Server Sync stop");
 
     statusBarWidgets->updateFromConfig();
+}
+
+void MainWindow::toogleMapAutoBoundsAndZoom()
+{
+    bool status = ui->actionStatusMapAuto->isChecked();
+    ui->actionStatusMapAuto->setChecked(status);
+
+    if(status)
+        mapExecJS("setAutoBounds(true);");
+    else
+        mapExecJS("setAutoBounds(false);");
 }
 
 void MainWindow::handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState)
@@ -211,24 +235,21 @@ void MainWindow::handleServerSyncSocketEvent(QAbstractSocket::SocketState socket
 
 void MainWindow::appendLogLine(QString line)
 {
-    QTextEdit* logText = ui->logText;
-    logText->append(line.simplified());
+    QPlainTextEdit* logText = ui->logText;
+    logText->appendPlainText(QString("%1 - %2")
+                    .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss.zzz"))
+                    .arg(line.simplified()));
 
     QTextCursor cursor = logText->textCursor();
-
-    while(logText->document()->lineCount() > 50) {
+    while(logText->blockCount() > 50) {
+        qDebug() << logText->blockCount();
         cursor.movePosition(QTextCursor::Start);
-        cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, 0);
-        cursor.select(QTextCursor::LineUnderCursor);
+        cursor.select(QTextCursor::BlockUnderCursor);
         cursor.removeSelectedText();
+        cursor.deleteChar();
     }
 
     cursor.movePosition(QTextCursor::End);
-}
-
-void MainWindow::newLine(Line line)
-{
-
 }
 
 void MainWindow::imageSaved(QString imageName)
@@ -256,12 +277,51 @@ void MainWindow::updateClientsTable()
     clientsTable->resizeColumnsToContents();
 }
 
-void MainWindow::updateClient(Client* client)
+void MainWindow::removeAllRemoteClients()
 {
-    qDebug() << "Update client" << client->getId();
+    clientsTable->clearContents();
+    clientsTable->setRowCount(0);
+    clientsTable->resizeColumnsToContents();
+
+    mapExecJS("removeAllRemoteClients();");
+}
+
+void MainWindow::addRemoteClient(Client* client)
+{
+    mapExecJS(QString("addRemoteClient(\"%1\", \"%2\");").arg(client->getId()).arg(client->getName()));
+}
+
+void MainWindow::updateRemoteClient(Client* client)
+{
+    mapExecJS(QString("updateRemoteClient(\"%1\", %2, %3);")
+              .arg(client->getId())
+              .arg(client->getPosition().latitude())
+              .arg(client->getPosition().longitude()));
+}
+
+void MainWindow::removeRemoteClient(Client* client)
+{
+    mapExecJS(QString("removeRemoteClient(\"%1\");").arg(client->getId()));
 }
 
 void MainWindow::updateLocalClient(Client* client)
 {
-    qDebug() << "Update local client" << client->getId();
+    mapExecJS(QString("updateLocal(%1, %2);")
+              .arg(client->getPosition().latitude())
+              .arg(client->getPosition().longitude()));
+}
+
+void MainWindow::mapExecJS(QString jsCode)
+{
+    webView->page()->runJavaScript(jsCode);
+}
+
+void MainWindow::mapHabUpdate(double latitude, double longitude)
+{
+    mapExecJS(QString("updateHab(%1, %2);").arg(latitude).arg(longitude));
+}
+
+void MainWindow::mapHabRemove()
+{
+    mapExecJS("removeHab();");
 }

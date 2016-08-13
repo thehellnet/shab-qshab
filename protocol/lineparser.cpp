@@ -37,7 +37,6 @@ HabPositionLine* LineParser::parseHabPosition(QString rawLine, QStringList items
         return nullptr;
 
     HabPositionLine* line = new HabPositionLine();
-    line->setRawLine(rawLine);
     line->setLatitude(items[2].toFloat());
     line->setLongitude(items[3].toFloat());
     line->setAltitude(items[4].toFloat());
@@ -51,7 +50,6 @@ HabImageLine* LineParser::parseHabImage(QString rawLine, QStringList items)
         return nullptr;
 
     HabImageLine* line = new HabImageLine();
-    line->setRawLine(rawLine);
     line->setSliceTot(items[2].toInt());
     line->setSliceNum(items[3].toInt());
     line->setData(QByteArray::fromBase64(items[4].toLatin1()));
@@ -65,7 +63,6 @@ HabTelemetryLine* LineParser::parseHabTelemetry(QString rawLine, QStringList ite
         return nullptr;
 
     HabTelemetryLine* line = new HabTelemetryLine();
-    line->setRawLine(rawLine);
     return line;
 }
 
@@ -76,7 +73,6 @@ ClientConnectLine* LineParser::parseClientConnect(QString rawLine, QStringList i
         return nullptr;
 
     ClientConnectLine* line = new ClientConnectLine();
-    line->setRawLine(rawLine);
     line->setId(items[2]);
     line->setName(items[3]);
     return line;
@@ -89,7 +85,6 @@ ClientUpdateLine* LineParser::parseClientUpdate(QString rawLine, QStringList ite
         return nullptr;
 
     ClientUpdateLine* line = new ClientUpdateLine();
-    line->setRawLine(rawLine);
     line->setId(items[2]);
     line->setLatitude(items[3].toFloat());
     line->setLongitude(items[4].toFloat());
@@ -104,7 +99,6 @@ ClientDisconnectLine* LineParser::parseClientDisconnect(QString rawLine, QString
         return nullptr;
 
     ClientDisconnectLine* line = new ClientDisconnectLine();
-    line->setRawLine(rawLine);
     line->setId(items[2]);
     return line;
 }

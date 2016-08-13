@@ -8,6 +8,11 @@ ServerSocket::ServerSocket(QObject *parent) : QObject(parent)
     socket = nullptr;
 }
 
+bool ServerSocket::isRunning() const
+{
+    return running;
+}
+
 void ServerSocket::start(QString address, quint16 port)
 {
     if(socket != nullptr)
@@ -19,6 +24,8 @@ void ServerSocket::start(QString address, quint16 port)
     socket->connectToHost(address, port);
     connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
     connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
+
+    running = true;
 }
 
 void ServerSocket::stop()
@@ -30,6 +37,8 @@ void ServerSocket::stop()
 
     delete socket;
     socket = nullptr;
+
+    running = false;
 }
 
 void ServerSocket::socketStateChanged(QAbstractSocket::SocketState socketState)

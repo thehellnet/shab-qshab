@@ -36,6 +36,7 @@ class DataHandler : public QObject
 
         void parseNewLine(Line* line);
         Client* findClientById(QString id);
+        void toogleLocalPositionUpdateTimer();
 
     public slots:
         void startHab();
@@ -53,12 +54,14 @@ class DataHandler : public QObject
         void sendLocalClientUpdates();
 
     signals:
-        void newLine(Line* line);
         void newLine(QString line);
         void newSocketState(QAbstractSocket::SocketState socketState);
         void updateClientsList();
+        void removeAllRemoteClients();
         void updateLocalClient(Client* client);
-        void updateClient(Client* client);
+        void addRemoteClient(Client* client);
+        void updateRemoteClient(Client* client);
+        void removeRemoteClient(Client* client);
 };
 
 #endif // DATAHANDLER_HPP

@@ -54,23 +54,36 @@ void DataHandler::stopHab()
 void DataHandler::startLocalGps()
 {
     gpsHandler->start();
+    toogleLocalPositionUpdateTimer();
 }
 
 void DataHandler::stopLocalGps()
 {
     gpsHandler->stop();
+    toogleLocalPositionUpdateTimer();
 }
 
 void DataHandler::startServerSync()
 {
     serverSocket->start(config->getServerSyncAddress(), config->getServerSyncPort());
-    localUpdateTimer->start();
+    toogleLocalPositionUpdateTimer();
 }
 
 void DataHandler::stopServerSync()
 {
-    localUpdateTimer->stop();
     serverSocket->stop();
+    toogleLocalPositionUpdateTimer();
+
+    remoteClients->clear();
+    emit removeAllRemoteClients();
+}
+
+void DataHandler::toogleLocalPositionUpdateTimer()
+{
+    if(gpsHandler->isRunning() && serverSocket->isRunning())
+        localUpdateTimer->start();
+    else
+        localUpdateTimer->stop();
 }
 
 void DataHandler::handleNewLine(QString strLine)
@@ -85,14 +98,16 @@ void DataHandler::handleNewLine(QString strLine)
     if(line == nullptr)
         return;
 
+    emit newLine(strLine);
+
     parseNewLine(line);
-    emit newLine(line);
+
     delete line;
 }
 
 Client* DataHandler::findClientById(QString id)
 {
-    for(int i=1; i<remoteClients->count(); i++) {
+    for(int i = 0; i < remoteClients->count(); i++) {
         Client* client = remoteClients->at(i);
         if(client->getId() == id)
             return client;
@@ -111,6 +126,7 @@ void DataHandler::parseNewLine(Line* line)
         newClient->setName(castedLine->getName());
         remoteClients->append(newClient);
 
+        emit addRemoteClient(newClient);
         emit updateClientsList();
     } else if(line->getCommand() == Command::ClientUpdate) {
         ClientUpdateLine* castedLine = static_cast<ClientUpdateLine*>(line);
@@ -125,17 +141,18 @@ void DataHandler::parseNewLine(Line* line)
         position.setAltitude(castedLine->getAltitude());
         client->setPosition(position);
 
-        emit updateClientsList();
+        emit updateRemoteClient(client);
     } else if(line->getCommand() == Command::ClientDisconnect) {
         ClientDisconnectLine* castedLine = static_cast<ClientDisconnectLine*>(line);
 
-        for(int i = 1; i < remoteClients->count(); i++) {
+        for(int i = 0; i < remoteClients->count(); i++) {
             Client* client = remoteClients->at(i);
-            if(client->getId() == castedLine->getId())
+            if(client->getId() == castedLine->getId()) {
                 remoteClients->removeAt(i);
+                emit removeRemoteClient(client);
+                emit updateClientsList();
+            }
         }
-
-        emit updateClientsList();
     } else if(line->getCommand() == Command::HabPosition) {
         HabPositionLine* castedLine = static_cast<HabPositionLine*>(line);
 
@@ -151,16 +168,12 @@ void DataHandler::parseNewLine(Line* line)
 void DataHandler::handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState)
 {
     if(socketState == QAbstractSocket::ConnectedState) {
-        ClientConnectLine* ccLine = new ClientConnectLine();
-        ccLine->setId(localClient->getId());
-        ccLine->setName(localClient->getName());
-        QString socketLine = Utility::addChecksum(ccLine->serialize());
+        ClientConnectLine ccLine;
+        ccLine.setId(localClient->getId());
+        ccLine.setName(localClient->getName());
+        QString socketLine = Utility::addChecksum(ccLine.serialize());
         serverSocket->writeLine(socketLine);
-
         emit newLine(socketLine);
-        emit newLine(ccLine);
-
-        delete ccLine;
     }
 
     emit newSocketState(socketState);
@@ -184,14 +197,18 @@ void DataHandler::handleLocalGpsNewPosition(QGeoCoordinate newPosition)
 
 void DataHandler::sendLocalClientUpdates()
 {
-    ClientUpdateLine* cuLine = new ClientUpdateLine();
-    cuLine->setId(localClient->getId());
-    cuLine->setLatitude(localClient->getPosition().latitude());
-    cuLine->setLongitude(localClient->getPosition().longitude());
-    cuLine->setAltitude(localClient->getPosition().altitude());
-    QString socketLine = Utility::addChecksum(cuLine->serialize());
+    if(std::isnan(localClient->getPosition().latitude())
+            || std::isnan(localClient->getPosition().longitude())
+            || std::isnan(localClient->getPosition().altitude()))
+        return;
+
+    ClientUpdateLine cuLine;
+    cuLine.setId(localClient->getId());
+    cuLine.setLatitude(localClient->getPosition().latitude());
+    cuLine.setLongitude(localClient->getPosition().longitude());
+    cuLine.setAltitude(localClient->getPosition().altitude());
+
+    QString socketLine = Utility::addChecksum(cuLine.serialize());
     serverSocket->writeLine(socketLine);
     emit newLine(socketLine);
-    emit newLine(cuLine);
-    delete cuLine;
 }

@@ -16,6 +16,11 @@ GPSHandler::~GPSHandler()
     delete source;
 }
 
+bool GPSHandler::isRunning() const
+{
+    return running;
+}
+
 void GPSHandler::start()
 {
     serial->setPortName(config->getLocalGpsSerialPort());
@@ -30,6 +35,8 @@ void GPSHandler::start()
 
     source->setDevice(serial);
     source->startUpdates();
+
+    running = true;
 }
 
 void GPSHandler::stop()
@@ -37,6 +44,8 @@ void GPSHandler::stop()
     source->stopUpdates();
 
     serial->close();
+
+    running = false;
 }
 
 void GPSHandler::positionUpdated(QGeoPositionInfo positionInfo)

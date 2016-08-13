@@ -12,12 +12,8 @@ class Line
         virtual QString serialize();
 
         Command getCommand() const;
-        QString getRawLine() const;
-        void setRawLine(const QString& value);
 
     protected:
-        QString rawLine;
-
         Line(Command command);
 
     private:
