@@ -54,6 +54,8 @@ class MainWindow : public QMainWindow
         void appendLogLine(QString line);
         void imageSaved(QString imageName);
         void updateClientsTable();
+        void updateClient(Client* client);
+        void updateLocalClient(Client* client);
 };
 
 #endif // MAINWINDOW_HPP

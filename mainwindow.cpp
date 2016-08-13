@@ -31,10 +31,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(dataHandler, SIGNAL(newLine(QString)), this, SLOT(appendLogLine(QString)));
     connect(dataHandler, SIGNAL(newSocketState(QAbstractSocket::SocketState)), this, SLOT(handleServerSyncSocketEvent(QAbstractSocket::SocketState)));
     connect(dataHandler, SIGNAL(updateClientsList()), this, SLOT(updateClientsTable()));
+    connect(dataHandler, SIGNAL(updateClient(Client*)), this, SLOT(updateClient(Client*)));
+    connect(dataHandler, SIGNAL(updateLocalClient(Client*)), this, SLOT(updateLocalClient(Client*)));
 
     configWindow->setModal(true);
     connect(configWindow, SIGNAL(configurationChanged()), this, SLOT(configurationChanged()));
-    connect(configWindow, SIGNAL(configurationChanged()), dataHandler, SLOT(updateLocalClient()));
+    connect(configWindow, SIGNAL(configurationChanged()), dataHandler, SLOT(reloadLocalClient()));
 
     statusBarWidgets->updateFromConfig();
 
@@ -252,4 +254,14 @@ void MainWindow::updateClientsTable()
     }
 
     clientsTable->resizeColumnsToContents();
+}
+
+void MainWindow::updateClient(Client* client)
+{
+    qDebug() << "Update client" << client->getId();
+}
+
+void MainWindow::updateLocalClient(Client* client)
+{
+    qDebug() << "Update local client" << client->getId();
 }
