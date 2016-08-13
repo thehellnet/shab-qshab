@@ -36,9 +36,9 @@ StatusBarWidgets::~StatusBarWidgets()
 
 void StatusBarWidgets::initLabelStyle(QLabel* label)
 {
-//    label->setFrameShape(QFrame::StyledPanel);
+    label->setFrameShape(QFrame::StyledPanel);
 //    label->setFrameShadow(QFrame::Sunken);
-    label->setAlignment(Qt::AlignCenter | Qt::AlignTop);
+    label->setAlignment(Qt::AlignCenter);
     label->setMinimumWidth(50);
     label->setStyleSheet("padding-left: 3px; padding-right: 3px;");
 }
@@ -46,9 +46,6 @@ void StatusBarWidgets::initLabelStyle(QLabel* label)
 void StatusBarWidgets::initTime()
 {
     time->setText("time");
-    time->setMinimumWidth(140);
-    time->setMaximumWidth(140);
-    time->setStyleSheet("");
 }
 
 void StatusBarWidgets::initHabSerial()
