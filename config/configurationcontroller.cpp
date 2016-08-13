@@ -21,6 +21,7 @@ void ConfigurationController::loadConfig(Configuration* config)
     settings.endGroup();
 
     settings.beginGroup("localGps");
+    config->setLocalGpsSerialEnable(settings.value("enable", false).toBool());
     config->setLocalGpsSerialPort(settings.value("serialPort", "").toString());
     config->setLocalGpsSerialSpeed(settings.value("serialSpeed", QSerialPort::Baud9600).value<QSerialPort::BaudRate>());
     config->setLocalGpsSerialFlowControl(settings.value("serialFlowControl", QSerialPort::NoFlowControl).value<QSerialPort::FlowControl>());
@@ -54,6 +55,7 @@ void ConfigurationController::saveConfig(Configuration* config)
     settings.endGroup();
 
     settings.beginGroup("localGps");
+    settings.setValue("enable", config->getLocalGpsSerialEnable());
     settings.setValue("serialPort", config->getLocalGpsSerialPort());
     settings.setValue("serialFlowControl", config->getLocalGpsSerialFlowControl());
     settings.setValue("serialSpeed", config->getLocalGpsSerialSpeed());
