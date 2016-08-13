@@ -191,7 +191,7 @@ void ConfigWindow::save()
 
     config->setLocalGpsSerialEnable(ui->localGpsSerialPortBox->isChecked());
     config->setLocalGpsSerialPort(ui->localGpsSerialPortComboBox->currentText());
-    config->setLocalGpsSerialSpeed(ui->localGpsSerialPortComboBox->currentData().value<QSerialPort::BaudRate>());
+    config->setLocalGpsSerialSpeed(ui->localGpsSerialSpeedComboBox->currentData().value<QSerialPort::BaudRate>());
     config->setLocalGpsSerialFlowControl(ui->localGpsSerialFlowControlComboBox->currentData().value<QSerialPort::FlowControl>());
     config->setLocalGpsSerialParity(ui->localGpsSerialParityComboBox->currentData().value<QSerialPort::Parity>());
     config->setLocalGpsSerialDataBits(ui->localGpsSerialDataBitsComboBox->currentData().value<QSerialPort::DataBits>());
