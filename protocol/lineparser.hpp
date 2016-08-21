@@ -19,12 +19,12 @@ class LineParser
         static Line* parseLine(QString rawLine);
 
     private:
-        static HabPositionLine* parseHabPosition(QString rawLine, QStringList items);
-        static HabImageLine* parseHabImage(QString rawLine, QStringList items);
-        static HabTelemetryLine* parseHabTelemetry(QString rawLine, QStringList items);
-        static ClientConnectLine* parseClientConnect(QString rawLine, QStringList items);
-        static ClientUpdateLine* parseClientUpdate(QString rawLine, QStringList items);
-        static ClientDisconnectLine* parseClientDisconnect(QString rawLine, QStringList items);
+        static HabPositionLine* parseHabPosition(QStringList items);
+        static HabImageLine* parseHabImage(QStringList items);
+        static HabTelemetryLine* parseHabTelemetry(QStringList items);
+        static ClientConnectLine* parseClientConnect(QStringList items);
+        static ClientUpdateLine* parseClientUpdate(QStringList items);
+        static ClientDisconnectLine* parseClientDisconnect(QStringList items);
 };
 
 #endif // LINEPARSER_HPP

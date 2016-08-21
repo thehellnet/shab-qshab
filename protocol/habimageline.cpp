@@ -15,7 +15,7 @@ QString HabImageLine::serialize()
     return QString("HI|%1|%2|%3")
             .arg(sliceTot)
             .arg(sliceNum)
-            .arg(QString(data.toBase64()));
+            .arg(QString(data.toBase64(QByteArray::Base64UrlEncoding)));
 }
 
 int HabImageLine::getSliceTot() const

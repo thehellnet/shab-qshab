@@ -411,10 +411,10 @@ void MainWindow::updateHabFixStatus(Hab* hab)
             ui->infoHabFixStatusValue->setText("Float RTK");
             break;
         case 6:
-            ui->infoHabFixStatusValue->setText("estimated (dead reckoning) (2.3 feature)");
+            ui->infoHabFixStatusValue->setText("Estimated (dead reckoning)");
             break;
         case 7:
-            ui->infoHabFixStatusValue->setText("Manual input mode");
+            ui->infoHabFixStatusValue->setText("Manual input");
             break;
         case 8:
             ui->infoHabFixStatusValue->setText("Simulation mode");

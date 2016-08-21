@@ -20,17 +20,17 @@ Line* LineParser::parseLine(QString rawLine)
             || items.count() < 2)
         return nullptr;
 
-    if(items[1] == "HP") return parseHabPosition(rawLine, items);
-    if(items[1] == "HI") return parseHabImage(rawLine, items);
-    if(items[1] == "HT") return parseHabTelemetry(rawLine, items);
-    if(items[1] == "CC") return parseClientConnect(rawLine, items);
-    if(items[1] == "CU") return parseClientUpdate(rawLine, items);
-    if(items[1] == "CD") return parseClientDisconnect(rawLine, items);
+    if(items[1] == "HP") return parseHabPosition(items);
+    if(items[1] == "HI") return parseHabImage(items);
+    if(items[1] == "HT") return parseHabTelemetry(items);
+    if(items[1] == "CC") return parseClientConnect(items);
+    if(items[1] == "CU") return parseClientUpdate(items);
+    if(items[1] == "CD") return parseClientDisconnect(items);
 
     return nullptr;
 }
 
-HabPositionLine* LineParser::parseHabPosition(QString rawLine, QStringList items)
+HabPositionLine* LineParser::parseHabPosition(QStringList items)
 {
     // 0000|HP|fixstatus|latitude|longitude|altitude
     if(items.size() != 6 || items[1] != "HP")
@@ -44,7 +44,7 @@ HabPositionLine* LineParser::parseHabPosition(QString rawLine, QStringList items
     return line;
 }
 
-HabImageLine* LineParser::parseHabImage(QString rawLine, QStringList items)
+HabImageLine* LineParser::parseHabImage(QStringList items)
 {
     // 0000|HI|slicenum|slicetot|base64data
     if(items.size() != 5 || items[1] != "HI")
@@ -53,11 +53,11 @@ HabImageLine* LineParser::parseHabImage(QString rawLine, QStringList items)
     HabImageLine* line = new HabImageLine();
     line->setSliceTot(items[2].toInt());
     line->setSliceNum(items[3].toInt());
-    line->setData(QByteArray::fromBase64(items[4].toLatin1()));
+    line->setData(QByteArray::fromBase64(items[4].toLatin1(), QByteArray::Base64UrlEncoding));
     return line;
 }
 
-HabTelemetryLine* LineParser::parseHabTelemetry(QString rawLine, QStringList items)
+HabTelemetryLine* LineParser::parseHabTelemetry(QStringList items)
 {
     // 0000|HT|
     if(items.size() != 2 || items[1] != "HT")
@@ -67,7 +67,7 @@ HabTelemetryLine* LineParser::parseHabTelemetry(QString rawLine, QStringList ite
     return line;
 }
 
-ClientConnectLine* LineParser::parseClientConnect(QString rawLine, QStringList items)
+ClientConnectLine* LineParser::parseClientConnect(QStringList items)
 {
     // 0000|CC|id|name
     if(items.size() != 4 || items[1] != "CC")
@@ -79,7 +79,7 @@ ClientConnectLine* LineParser::parseClientConnect(QString rawLine, QStringList i
     return line;
 }
 
-ClientUpdateLine* LineParser::parseClientUpdate(QString rawLine, QStringList items)
+ClientUpdateLine* LineParser::parseClientUpdate(QStringList items)
 {
     // 0000|CU|id|latitude|longitude|altitude
     if(items.size() != 6 || items[1] != "CU")
@@ -93,7 +93,7 @@ ClientUpdateLine* LineParser::parseClientUpdate(QString rawLine, QStringList ite
     return line;
 }
 
-ClientDisconnectLine* LineParser::parseClientDisconnect(QString rawLine, QStringList items)
+ClientDisconnectLine* LineParser::parseClientDisconnect(QStringList items)
 {
     // 0000|CD|id
     if(items.size() != 3 || items[1] != "CD")
