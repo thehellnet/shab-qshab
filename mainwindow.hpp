@@ -35,6 +35,12 @@ class MainWindow : public QMainWindow
 
         QStatusBar* statusBar;
         QWebEngineView* webView;
+        QLabel* positionInfoHabLatitudeValue;
+        QLabel* positionInfoHabLongitudeValue;
+        QLabel* positionInfoHabAltitudeValue;
+        QLabel* positionInfoLocalGpsLatitudeValue;
+        QLabel* positionInfoLocalGpsLongitudeValue;
+        QLabel* positionInfoLocalGpsAltitudeValue;
 
         void initWebView();
         void initStatusBar();
@@ -42,8 +48,12 @@ class MainWindow : public QMainWindow
         void showStatusBarMessage(QString message, int timeout = 3000);
 
         void mapExecJS(QString jsCode);
-        void mapHabUpdate(double latitude, double longitude);
-        void mapHabRemove();
+
+        void clearHabPosition();
+        void clearLocalGpsPosition();
+        void mapRemoteClientClear();
+
+        void clearHabFixStatus();
 
     private slots:
         void applicationExit();
@@ -59,10 +69,21 @@ class MainWindow : public QMainWindow
         void imageSaved(QString imageName);
         void updateClientsTable();
         void removeAllRemoteClients();
-        void updateLocalClient(Client* client);
-        void addRemoteClient(Client* client);
-        void updateRemoteClient(Client* client);
-        void removeRemoteClient(Client* client);
+
+        void updateHabPosition(Hab* hab);
+        void updateLocalGpsPosition(Client* client);
+
+        void mapHabUpdate(Hab* hab);
+        void mapHabRemove();
+        void mapLocalClientUpdate(Client* client);
+        void mapLocalClientRemove();
+        void mapRemoteClientAdd(Client* client);
+        void mapRemoteClientUpdate(Client* client);
+        void mapRemoteClientRemove(Client* client);
+
+        void updateHabFixStatus(Hab* hab);
+        void handleImageSlice(Hab* hab);
+        void handleNewImage(QByteArray imageData);
 };
 
 #endif // MAINWINDOW_HPP

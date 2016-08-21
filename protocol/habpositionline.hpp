@@ -12,6 +12,9 @@ class HabPositionLine : public Line
 
         QString serialize() override;
 
+        int getFixStatus() const;
+        void setFixStatus(int value);
+
         float getLatitude() const;
         void setLatitude(float value);
 
@@ -22,6 +25,7 @@ class HabPositionLine : public Line
         void setAltitude(float value);
 
     private:
+        int fixStatus;
         float latitude;
         float longitude;
         float altitude;

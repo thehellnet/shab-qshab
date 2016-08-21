@@ -9,6 +9,8 @@ DataHandler::DataHandler(QObject *parent) : QObject(parent)
 {
     config = Configuration::getInstance();
 
+    hab = new Hab();
+
     localClient = new Client();
     reloadLocalClient();
 
@@ -26,12 +28,16 @@ DataHandler::DataHandler(QObject *parent) : QObject(parent)
 
     gpsHandler = new GPSHandler(this);
     connect(gpsHandler, SIGNAL(newPosition(QGeoCoordinate)), this, SLOT(handleLocalGpsNewPosition(QGeoCoordinate)));
+
+    habHandler = new HabHandler(this);
+    connect(habHandler, SIGNAL(newLine(QString)), this, SLOT(handleNewLine(QString)));
 }
 
 DataHandler::~DataHandler()
 {
     delete localClient;
     delete remoteClients;
+    delete habHandler;
     delete gpsHandler;
     delete serverSocket;
 }
@@ -43,12 +49,12 @@ QList<Client*>* DataHandler::getClients() const
 
 void DataHandler::startHab()
 {
-
+    habHandler->start();
 }
 
 void DataHandler::stopHab()
 {
-
+    habHandler->stop();
 }
 
 void DataHandler::startLocalGps()
@@ -91,12 +97,12 @@ void DataHandler::handleNewLine(QString strLine)
     if(strLine == lastLine)
         return;
 
-    lastLine = strLine;
-    serverSocket->writeLine(lastLine);
-
     Line* line = LineParser::parseLine(strLine);
     if(line == nullptr)
         return;
+
+    lastLine = strLine;
+    serverSocket->writeLine(lastLine);
 
     emit newLine(strLine);
 
@@ -155,13 +161,27 @@ void DataHandler::parseNewLine(Line* line)
         }
     } else if(line->getCommand() == Command::HabPosition) {
         HabPositionLine* castedLine = static_cast<HabPositionLine*>(line);
-
+        hab->setFixStatus(castedLine->getFixStatus());
+        hab->setLatitude(castedLine->getLatitude());
+        hab->setLongitude(castedLine->getLongitude());
+        hab->setAltitude(castedLine->getAltitude());
+        emit habPositionUpdated(hab);
     } else if(line->getCommand() == Command::HabImage) {
         HabImageLine* castedLine = static_cast<HabImageLine*>(line);
 
+        if(castedLine->getSliceNum() == 1)
+            hab->clearImageData();
+
+        hab->setSliceTot(castedLine->getSliceTot());
+        hab->setSliceNum(castedLine->getSliceNum());
+        hab->appendImageData(castedLine->getData());
+        emit habImageSlice(hab);
+
+        if(castedLine->getSliceNum() == castedLine->getSliceTot() - 1)
+            emit newImage(hab->getImageData());
     } else if(line->getCommand() == Command::HabTelemetry) {
         HabTelemetryLine* castedLine = static_cast<HabTelemetryLine*>(line);
-
+        emit habTelemetryUpdated(hab);
     }
 }
 

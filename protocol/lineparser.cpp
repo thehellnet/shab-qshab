@@ -32,14 +32,15 @@ Line* LineParser::parseLine(QString rawLine)
 
 HabPositionLine* LineParser::parseHabPosition(QString rawLine, QStringList items)
 {
-    // 0000|HP|latitude|longitude|altitude
-    if(items.size() != 5 || items[1] != "HP")
+    // 0000|HP|fixstatus|latitude|longitude|altitude
+    if(items.size() != 6 || items[1] != "HP")
         return nullptr;
 
     HabPositionLine* line = new HabPositionLine();
-    line->setLatitude(items[2].toFloat());
-    line->setLongitude(items[3].toFloat());
-    line->setAltitude(items[4].toFloat());
+    line->setFixStatus(items[2].toInt());
+    line->setLatitude(items[3].toFloat());
+    line->setLongitude(items[4].toFloat());
+    line->setAltitude(items[5].toFloat());
     return line;
 }
 

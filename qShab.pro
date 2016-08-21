@@ -30,7 +30,9 @@ SOURCES += main.cpp \
     data/serversocket.cpp \
     datalogger.cpp \
     protocol/client.cpp \
-    data/gpshandler.cpp
+    data/gpshandler.cpp \
+    data/habhandler.cpp \
+    protocol/hab.cpp
 
 HEADERS  += mainwindow.hpp \
     configwindow.hpp \
@@ -51,7 +53,9 @@ HEADERS  += mainwindow.hpp \
     data/serversocket.hpp \
     datalogger.hpp \
     protocol/client.hpp \
-    data/gpshandler.hpp
+    data/gpshandler.hpp \
+    data/habhandler.hpp \
+    protocol/hab.hpp
 
 FORMS    += mainwindow.ui \
     configwindow.ui

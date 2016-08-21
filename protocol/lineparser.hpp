@@ -20,7 +20,7 @@ class LineParser
 
     private:
         static HabPositionLine* parseHabPosition(QString rawLine, QStringList items);
-        static HabImageLine*parseHabImage(QString rawLine, QStringList items);
+        static HabImageLine* parseHabImage(QString rawLine, QStringList items);
         static HabTelemetryLine* parseHabTelemetry(QString rawLine, QStringList items);
         static ClientConnectLine* parseClientConnect(QString rawLine, QStringList items);
         static ClientUpdateLine* parseClientUpdate(QString rawLine, QStringList items);

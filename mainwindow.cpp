@@ -4,9 +4,12 @@
 #include <QPlainTextEdit>
 #include <QTextCursor>
 #include <QTableWidgetItem>
+#include <QPixmap>
 
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
+#include "protocol/client.hpp"
+#include "protocol/hab.hpp"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -25,18 +28,37 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar = ui->statusBar;
     webView = ui->webView;
 
+    positionInfoHabLatitudeValue = ui->positionInfoHabLatitudeValue;
+    positionInfoHabLongitudeValue = ui->positionInfoHabLongitudeValue;
+    positionInfoHabAltitudeValue = ui->positionInfoHabAltitudeValue;
+    positionInfoLocalGpsLatitudeValue = ui->positionInfoLocalGpsLatitudeValue;
+    positionInfoLocalGpsLongitudeValue = ui->positionInfoLocalGpsLongitudeValue;
+    positionInfoLocalGpsAltitudeValue = ui->positionInfoLocalGpsAltitudeValue;
+
+    clearHabPosition();
+    clearLocalGpsPosition();
+    clearHabFixStatus();
+
     initClientsTable();
 
     connect(dataHandler, SIGNAL(newLine(Line)), this, SLOT(newLine(Line)));
     connect(dataHandler, SIGNAL(newLine(QString)), this, SLOT(appendLogLine(QString)));
     connect(dataHandler, SIGNAL(newSocketState(QAbstractSocket::SocketState)), this, SLOT(handleServerSyncSocketEvent(QAbstractSocket::SocketState)));
+
+    connect(dataHandler, SIGNAL(habPositionUpdated(Hab*)), this, SLOT(updateHabPosition(Hab*)));
+    connect(dataHandler, SIGNAL(updateLocalClient(Client*)), this, SLOT(updateLocalGpsPosition(Client*)));
     connect(dataHandler, SIGNAL(updateClientsList()), this, SLOT(updateClientsTable()));
     connect(dataHandler, SIGNAL(removeAllRemoteClients()), this, SLOT(removeAllRemoteClients()));
-    connect(dataHandler, SIGNAL(updateLocalClient(Client*)), this, SLOT(updateLocalClient(Client*)));
 
-    connect(dataHandler, SIGNAL(addRemoteClient(Client*)), this, SLOT(addRemoteClient(Client*)));
-    connect(dataHandler, SIGNAL(updateRemoteClient(Client*)), this, SLOT(updateRemoteClient(Client*)));
-    connect(dataHandler, SIGNAL(removeRemoteClient(Client*)), this, SLOT(removeRemoteClient(Client*)));
+    connect(dataHandler, SIGNAL(habPositionUpdated(Hab*)), this, SLOT(mapHabUpdate(Hab*)));
+    connect(dataHandler, SIGNAL(updateLocalClient(Client*)), this, SLOT(mapLocalClientUpdate(Client*)));
+    connect(dataHandler, SIGNAL(addRemoteClient(Client*)), this, SLOT(mapRemoteClientAdd(Client*)));
+    connect(dataHandler, SIGNAL(updateRemoteClient(Client*)), this, SLOT(mapRemoteClientUpdate(Client*)));
+    connect(dataHandler, SIGNAL(removeRemoteClient(Client*)), this, SLOT(mapRemoteClientRemove(Client*)));
+
+    connect(dataHandler, SIGNAL(habPositionUpdated(Hab*)), this, SLOT(updateHabFixStatus(Hab*)));
+    connect(dataHandler, SIGNAL(habImageSlice(Hab*)), this, SLOT(handleImageSlice(Hab*)));
+    connect(dataHandler, SIGNAL(newImage(QByteArray)), this, SLOT(handleNewImage(QByteArray)));
 
     configWindow->setModal(true);
     connect(configWindow, SIGNAL(configurationChanged()), this, SLOT(configurationChanged()));
@@ -144,10 +166,14 @@ void MainWindow::toogleHab()
     bool status = !config->getHabRunning();
     ui->actionStatusHAB->setChecked(status);
 
-    if(status)
+    if(status) {
         dataHandler->startHab();
-    else
+    } else {
         dataHandler->stopHab();
+        clearHabPosition();
+        mapHabRemove();
+        clearHabFixStatus();
+    }
 
     config->setHabRunning(status);
 
@@ -159,15 +185,46 @@ void MainWindow::toogleHab()
     statusBarWidgets->updateFromConfig();
 }
 
+void MainWindow::updateHabPosition(Hab* hab)
+{
+    positionInfoHabLatitudeValue->setText(QString::number(hab->getLatitude()));
+    positionInfoHabLongitudeValue->setText(QString::number(hab->getLongitude()));
+    positionInfoHabAltitudeValue->setText(QString::number(hab->getAltitude()));
+}
+
+void MainWindow::clearHabPosition()
+{
+    positionInfoHabLatitudeValue->setText("");
+    positionInfoHabLongitudeValue->setText("");
+    positionInfoHabAltitudeValue->setText("");
+}
+
+void MainWindow::updateLocalGpsPosition(Client* client)
+{
+    positionInfoLocalGpsLatitudeValue->setText(QString::number(client->getPosition().latitude()));
+    positionInfoLocalGpsLongitudeValue->setText(QString::number(client->getPosition().longitude()));
+    positionInfoLocalGpsAltitudeValue->setText(QString::number(client->getPosition().altitude()));
+}
+
+void MainWindow::clearLocalGpsPosition()
+{
+    positionInfoLocalGpsLatitudeValue->setText("");
+    positionInfoLocalGpsLongitudeValue->setText("");
+    positionInfoLocalGpsAltitudeValue->setText("");
+}
+
 void MainWindow::toogleLocalGps()
 {
     bool status = !config->getLocalGpsRunning();
     ui->actionStatusLocalGPS->setChecked(status);
 
-    if(status)
+    if(status) {
         dataHandler->startLocalGps();
-    else
+    } else {
         dataHandler->stopLocalGps();
+        clearLocalGpsPosition();
+        mapLocalClientRemove();
+    }
 
     config->setLocalGpsRunning(status);
 
@@ -242,7 +299,6 @@ void MainWindow::appendLogLine(QString line)
 
     QTextCursor cursor = logText->textCursor();
     while(logText->blockCount() > 50) {
-        qDebug() << logText->blockCount();
         cursor.movePosition(QTextCursor::Start);
         cursor.select(QTextCursor::BlockUnderCursor);
         cursor.removeSelectedText();
@@ -283,32 +339,17 @@ void MainWindow::removeAllRemoteClients()
     clientsTable->setRowCount(0);
     clientsTable->resizeColumnsToContents();
 
-    mapExecJS("removeAllRemoteClients();");
+    mapRemoteClientClear();
 }
 
-void MainWindow::addRemoteClient(Client* client)
+void MainWindow::mapHabUpdate(Hab* hab)
 {
-    mapExecJS(QString("addRemoteClient(\"%1\", \"%2\");").arg(client->getId()).arg(client->getName()));
+    mapExecJS(QString("updateHab(%1, %2);").arg(hab->getLatitude()).arg(hab->getLongitude()));
 }
 
-void MainWindow::updateRemoteClient(Client* client)
+void MainWindow::mapHabRemove()
 {
-    mapExecJS(QString("updateRemoteClient(\"%1\", %2, %3);")
-              .arg(client->getId())
-              .arg(client->getPosition().latitude())
-              .arg(client->getPosition().longitude()));
-}
-
-void MainWindow::removeRemoteClient(Client* client)
-{
-    mapExecJS(QString("removeRemoteClient(\"%1\");").arg(client->getId()));
-}
-
-void MainWindow::updateLocalClient(Client* client)
-{
-    mapExecJS(QString("updateLocal(%1, %2);")
-              .arg(client->getPosition().latitude())
-              .arg(client->getPosition().longitude()));
+    mapExecJS("removeHab();");
 }
 
 void MainWindow::mapExecJS(QString jsCode)
@@ -316,12 +357,87 @@ void MainWindow::mapExecJS(QString jsCode)
     webView->page()->runJavaScript(jsCode);
 }
 
-void MainWindow::mapHabUpdate(double latitude, double longitude)
+void MainWindow::mapLocalClientUpdate(Client* client)
 {
-    mapExecJS(QString("updateHab(%1, %2);").arg(latitude).arg(longitude));
+    mapExecJS(QString("updateLocal(%1, %2);")
+              .arg(client->getPosition().latitude())
+              .arg(client->getPosition().longitude()));
 }
 
-void MainWindow::mapHabRemove()
+void MainWindow::mapLocalClientRemove()
 {
-    mapExecJS("removeHab();");
+    mapExecJS("removeLocal();");
+}
+
+void MainWindow::mapRemoteClientClear()
+{
+    mapExecJS("removeAllRemoteClients();");
+}
+
+void MainWindow::mapRemoteClientAdd(Client* client)
+{
+    mapExecJS(QString("addRemoteClient(\"%1\", \"%2\");").arg(client->getId()).arg(client->getName()));
+}
+
+void MainWindow::mapRemoteClientUpdate(Client* client)
+{
+    mapExecJS(QString("updateRemoteClient(\"%1\", %2, %3);")
+              .arg(client->getId())
+              .arg(client->getPosition().latitude())
+              .arg(client->getPosition().longitude()));
+}
+
+void MainWindow::mapRemoteClientRemove(Client* client)
+{
+    mapExecJS(QString("removeRemoteClient(\"%1\");").arg(client->getId()));
+}
+
+void MainWindow::updateHabFixStatus(Hab* hab)
+{
+    switch (hab->getFixStatus()) {
+        case 1:
+            ui->infoHabFixStatusValue->setText("GPS fix (SPS)");
+            break;
+        case 2:
+            ui->infoHabFixStatusValue->setText("DGPS fix");
+            break;
+        case 3:
+            ui->infoHabFixStatusValue->setText("PPS fix");
+            break;
+        case 4:
+            ui->infoHabFixStatusValue->setText("Real Time Kinematic");
+            break;
+        case 5:
+            ui->infoHabFixStatusValue->setText("Float RTK");
+            break;
+        case 6:
+            ui->infoHabFixStatusValue->setText("estimated (dead reckoning) (2.3 feature)");
+            break;
+        case 7:
+            ui->infoHabFixStatusValue->setText("Manual input mode");
+            break;
+        case 8:
+            ui->infoHabFixStatusValue->setText("Simulation mode");
+            break;
+        default:
+            ui->infoHabFixStatusValue->setText("invalid");
+    }
+}
+
+void MainWindow::clearHabFixStatus()
+{
+    ui->infoHabFixStatusValue->setText("");
+}
+
+void MainWindow::handleImageSlice(Hab* hab)
+{
+    ui->infoImageProgressBar->setMaximum(hab->getSliceTot());
+    ui->infoImageProgressBar->setValue(hab->getSliceNum());
+}
+
+void MainWindow::handleNewImage(QByteArray imageData)
+{
+    QPixmap pixmap;
+    if(pixmap.loadFromData(imageData, "JPG"))
+        ui->imageLabel->setPixmap(pixmap);
 }

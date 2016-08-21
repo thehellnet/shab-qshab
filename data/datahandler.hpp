@@ -8,10 +8,12 @@
 #include <QTimer>
 
 #include "config/configuration.hpp"
+#include "protocol/hab.hpp"
 #include "protocol/line.hpp"
 #include "protocol/client.hpp"
 #include "data/serversocket.hpp"
 #include "data/gpshandler.hpp"
+#include "data/habhandler.hpp"
 
 class DataHandler : public QObject
 {
@@ -28,11 +30,14 @@ class DataHandler : public QObject
 
         QString lastLine;
         QTimer* localUpdateTimer;
+
+        Hab* hab;
         Client* localClient;
         QList<Client*>* remoteClients;
 
         ServerSocket* serverSocket;
         GPSHandler* gpsHandler;
+        HabHandler* habHandler;
 
         void parseNewLine(Line* line);
         Client* findClientById(QString id);
@@ -62,6 +67,10 @@ class DataHandler : public QObject
         void addRemoteClient(Client* client);
         void updateRemoteClient(Client* client);
         void removeRemoteClient(Client* client);
+        void habPositionUpdated(Hab* hab);
+        void habImageSlice(Hab* hab);
+        void habTelemetryUpdated(Hab* hab);
+        void newImage(QByteArray data);
 };
 
 #endif // DATAHANDLER_HPP
