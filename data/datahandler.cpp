@@ -177,7 +177,7 @@ void DataHandler::parseNewLine(Line* line)
         hab->appendImageData(castedLine->getData());
         emit habImageSlice(hab);
 
-        if(castedLine->getSliceNum() == castedLine->getSliceTot() - 1)
+        if(castedLine->getSliceNum() == castedLine->getSliceTot())
             emit newImage(hab->getImageData());
     } else if(line->getCommand() == Command::HabTelemetry) {
         HabTelemetryLine* castedLine = static_cast<HabTelemetryLine*>(line);
