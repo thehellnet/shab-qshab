@@ -16,8 +16,13 @@ class ServerSocket : public QObject
 
     private:
         bool running;
+        QString address;
+        quint16 port;
         QTcpSocket* socket;
         QString lastLine;
+
+        void connectSocket();
+        void disconnectSocket();
 
     public slots:
         void start(QString address, quint16 port);

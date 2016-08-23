@@ -6,6 +6,7 @@
 ServerSocket::ServerSocket(QObject *parent) : QObject(parent)
 {
     socket = nullptr;
+    running = false;
 }
 
 bool ServerSocket::isRunning() const
@@ -20,10 +21,9 @@ void ServerSocket::start(QString address, quint16 port)
 
     lastLine = "";
 
-    socket = new QTcpSocket(this);
-    socket->connectToHost(address, port);
-    connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
-    connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
+    this->address = address;
+    this->port = port;
+    connectSocket();
 
     running = true;
 }
@@ -33,12 +33,25 @@ void ServerSocket::stop()
     if(socket == nullptr)
         return;
 
+    disconnectSocket();
+
+    running = false;
+}
+
+void ServerSocket::connectSocket()
+{
+    socket = new QTcpSocket(this);
+    socket->connectToHost(address, port);
+    connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
+}
+
+void ServerSocket::disconnectSocket()
+{
     socket->close();
 
     delete socket;
     socket = nullptr;
-
-    running = false;
 }
 
 void ServerSocket::socketStateChanged(QAbstractSocket::SocketState socketState)
