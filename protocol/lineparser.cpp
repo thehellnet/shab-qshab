@@ -59,11 +59,14 @@ HabImageLine* LineParser::parseHabImage(QStringList items)
 
 HabTelemetryLine* LineParser::parseHabTelemetry(QStringList items)
 {
-    // 0000|HT|
-    if(items.size() != 2 || items[1] != "HT")
+    // 0000|HT|int_temp|ext_temp|ext_alt
+    if(items.size() != 5 || items[1] != "HT")
         return nullptr;
 
     HabTelemetryLine* line = new HabTelemetryLine();
+    line->setIntTemp(items[2].toFloat());
+    line->setExtTemp(items[3].toFloat());
+    line->setExtAlt(items[4].toFloat());
     return line;
 }
 
