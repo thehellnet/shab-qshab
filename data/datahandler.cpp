@@ -181,6 +181,9 @@ void DataHandler::parseNewLine(Line* line)
             emit newImage(hab->getImageData());
     } else if(line->getCommand() == Command::HabTelemetry) {
         HabTelemetryLine* castedLine = static_cast<HabTelemetryLine*>(line);
+        hab->setIntTemp(castedLine->getIntTemp());
+        hab->setExtTemp(castedLine->getExtTemp());
+        hab->setExtAlt(castedLine->getExtAlt());
         emit habTelemetryUpdated(hab);
     }
 }

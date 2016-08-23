@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     clearHabPosition();
     clearLocalGpsPosition();
     clearHabFixStatus();
+    clearHabTelemetry();
 
     initClientsTable();
 
@@ -56,9 +57,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(dataHandler, SIGNAL(updateRemoteClient(Client*)), this, SLOT(mapRemoteClientUpdate(Client*)));
     connect(dataHandler, SIGNAL(removeRemoteClient(Client*)), this, SLOT(mapRemoteClientRemove(Client*)));
 
-    connect(dataHandler, SIGNAL(habPositionUpdated(Hab*)), this, SLOT(updateHabFixStatus(Hab*)));
     connect(dataHandler, SIGNAL(habImageSlice(Hab*)), this, SLOT(handleImageSlice(Hab*)));
     connect(dataHandler, SIGNAL(newImage(QByteArray)), this, SLOT(handleNewImage(QByteArray)));
+    connect(dataHandler, SIGNAL(habPositionUpdated(Hab*)), this, SLOT(updateHabFixStatus(Hab*)));
+    connect(dataHandler, SIGNAL(habTelemetryUpdated(Hab*)), this, SLOT(updateHabTelemetry(Hab*)));
 
     configWindow->setModal(true);
     connect(configWindow, SIGNAL(configurationChanged()), this, SLOT(configurationChanged()));
@@ -173,6 +175,7 @@ void MainWindow::toogleHab()
         clearHabPosition();
         mapHabRemove();
         clearHabFixStatus();
+        clearHabTelemetry();
     }
 
     config->setHabRunning(status);
@@ -440,4 +443,18 @@ void MainWindow::handleNewImage(QByteArray imageData)
     QPixmap pixmap;
     if(pixmap.loadFromData(imageData, "JPG"))
         ui->imageLabel->setPixmap(pixmap);
+}
+
+void MainWindow::updateHabTelemetry(Hab* hab)
+{
+    ui->infoTelemetryIntTempValue->setText(QString("%1 °C").arg(hab->getIntTemp(), 0, 'f', 1));
+    ui->infoTelemetryExtTempValue->setText(QString("%1 °C").arg(hab->getExtTemp(), 0, 'f', 1));
+    ui->infoTelemetryExtAltValue->setText(QString("%1 m").arg(hab->getExtAlt(), 0, 'f', 1));
+}
+
+void MainWindow::clearHabTelemetry()
+{
+    ui->infoTelemetryIntTempValue->setText("");
+    ui->infoTelemetryExtTempValue->setText("");
+    ui->infoTelemetryExtAltValue->setText("");
 }

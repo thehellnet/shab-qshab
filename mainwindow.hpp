@@ -54,6 +54,7 @@ class MainWindow : public QMainWindow
         void mapRemoteClientClear();
 
         void clearHabFixStatus();
+        void clearHabTelemetry();
 
     private slots:
         void applicationExit();
@@ -81,9 +82,11 @@ class MainWindow : public QMainWindow
         void mapRemoteClientUpdate(Client* client);
         void mapRemoteClientRemove(Client* client);
 
-        void updateHabFixStatus(Hab* hab);
         void handleImageSlice(Hab* hab);
         void handleNewImage(QByteArray imageData);
+        void updateHabFixStatus(Hab* hab);
+        void updateHabTelemetry(Hab* hab);
+
 };
 
 #endif // MAINWINDOW_HPP

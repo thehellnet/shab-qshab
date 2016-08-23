@@ -30,6 +30,15 @@ class Hab
         void clearImageData();
         void appendImageData(const QByteArray& value);
 
+        float getIntTemp() const;
+        void setIntTemp(float value);
+
+        float getExtTemp() const;
+        void setExtTemp(float value);
+
+        float getExtAlt() const;
+        void setExtAlt(float value);
+
     private:
         int fixStatus;
         double latitude;
@@ -39,6 +48,10 @@ class Hab
         int sliceTot;
         int sliceNum;
         QByteArray imageData;
+
+        float intTemp;
+        float extTemp;
+        float extAlt;
 };
 
 #endif // HAB_HPP
