@@ -7,7 +7,8 @@ enum Command {
     HabTelemetry,
     ClientConnect,
     ClientUpdate,
-    ClientDisconnect
+    ClientDisconnect,
+    ServerPing
 };
 
 #endif // COMMAND_HPP

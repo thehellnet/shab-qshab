@@ -17,6 +17,7 @@ QString HabTelemetryLine::serialize()
             .arg(extTemp, 0, 'f', 1)
             .arg(extAlt, 0, 'f', 0);
 }
+
 float HabTelemetryLine::getIntTemp() const
 {
     return intTemp;

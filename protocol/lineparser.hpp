@@ -10,6 +10,7 @@
 #include "protocol/clientconnectline.hpp"
 #include "protocol/clientupdateline.hpp"
 #include "protocol/clientdisconnectline.hpp"
+#include "protocol/serverpingline.hpp"
 
 class LineParser
 {
@@ -25,6 +26,7 @@ class LineParser
         static ClientConnectLine* parseClientConnect(QStringList items);
         static ClientUpdateLine* parseClientUpdate(QStringList items);
         static ClientDisconnectLine* parseClientDisconnect(QStringList items);
+        static ServerPingLine* parseServerPing(QStringList items);
 };
 
 #endif // LINEPARSER_HPP

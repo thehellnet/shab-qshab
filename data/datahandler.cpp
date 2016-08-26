@@ -1,4 +1,5 @@
-#include <cmath>
+#include <QtGlobal>
+#include <QDateTime>
 
 #include "datahandler.hpp"
 #include "utility.hpp"
@@ -31,6 +32,11 @@ DataHandler::DataHandler(QObject *parent) : QObject(parent)
 
     habHandler = new HabHandler(this);
     connect(habHandler, SIGNAL(newLine(QString)), this, SLOT(handleNewLine(QString)));
+
+    heartBeatTimer = new QTimer(this);
+    heartBeatTimer->setInterval(2500);
+    heartBeatTimer->setSingleShot(false);
+    connect(heartBeatTimer, SIGNAL(timeout()), this, SLOT(heartBeatCheck()));
 }
 
 DataHandler::~DataHandler()
@@ -73,12 +79,15 @@ void DataHandler::startServerSync()
 {
     serverSocket->start(config->getServerSyncAddress(), config->getServerSyncPort());
     toogleLocalPositionUpdateTimer();
+    heartBeatTimer->start();
+    lastPingTime = QDateTime::currentDateTime();
 }
 
 void DataHandler::stopServerSync()
 {
     serverSocket->stop();
     toogleLocalPositionUpdateTimer();
+    heartBeatTimer->stop();
 
     remoteClients->clear();
     emit removeAllRemoteClients();
@@ -185,6 +194,9 @@ void DataHandler::parseNewLine(Line* line)
         hab->setExtTemp(castedLine->getExtTemp());
         hab->setExtAlt(castedLine->getExtAlt());
         emit habTelemetryUpdated(hab);
+    } else if(line->getCommand() == Command::ServerPing) {
+        //ServerPingLine* castedLine = static_cast<ServerPingLine*>(line);
+        lastPingTime = QDateTime::currentDateTime();
     }
 }
 
@@ -211,7 +223,7 @@ void DataHandler::reloadLocalClient()
 
 void DataHandler::handleLocalGpsNewPosition(QGeoCoordinate newPosition)
 {
-    if(std::isnan(newPosition.altitude()))
+    if(qIsNaN(newPosition.altitude()))
         return;
 
     localClient->setPosition(newPosition);
@@ -220,9 +232,9 @@ void DataHandler::handleLocalGpsNewPosition(QGeoCoordinate newPosition)
 
 void DataHandler::sendLocalClientUpdates()
 {
-    if(std::isnan(localClient->getPosition().latitude())
-            || std::isnan(localClient->getPosition().longitude())
-            || std::isnan(localClient->getPosition().altitude()))
+    if(qIsNaN(localClient->getPosition().latitude())
+            || qIsNaN(localClient->getPosition().longitude())
+            || qIsNaN(localClient->getPosition().altitude()))
         return;
 
     ClientUpdateLine cuLine;
@@ -234,4 +246,26 @@ void DataHandler::sendLocalClientUpdates()
     QString socketLine = Utility::addChecksum(cuLine.serialize());
     serverSocket->writeLine(socketLine);
     emit newLine(socketLine);
+}
+
+void DataHandler::heartBeatCheck()
+{
+    QDateTime now = QDateTime::currentDateTime();
+
+    qDebug() << "Last DateTime:" << lastPingTime;
+    qDebug() << "Now:          " << now;
+
+    if(lastPingTime.addSecs(5) <= now) {
+        serverSocket->restartSocket();
+        lastPingTime = QDateTime::currentDateTime();
+        return;
+    }
+
+    if(serverSocket->isSocketConnected()) {
+        ServerPingLine pingLine;
+//        pingLine.setTimestamp(QDateTime::currentDateTime().toMSecsSinceEpoch());
+        pingLine.setTimestamp(0);
+        QString socketLine = Utility::addChecksum(pingLine.serialize());
+        serverSocket->writeLine(socketLine);
+    }
 }

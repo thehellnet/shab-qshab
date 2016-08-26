@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QString>
+#include <QMutex>
+#include <QTimer>
 
 class ServerSocket : public QObject
 {
@@ -13,6 +15,7 @@ class ServerSocket : public QObject
         explicit ServerSocket(QObject *parent = 0);
 
         bool isRunning() const;
+        bool isSocketConnected();
 
     private:
         bool running;
@@ -20,6 +23,9 @@ class ServerSocket : public QObject
         quint16 port;
         QTcpSocket* socket;
         QString lastLine;
+        QMutex mutex;
+
+        bool reconnecting;
 
         void connectSocket();
         void disconnectSocket();
@@ -28,6 +34,7 @@ class ServerSocket : public QObject
         void start(QString address, quint16 port);
         void stop();
         void writeLine(QString line);
+        void restartSocket();
 
     private slots:
         void socketStateChanged(QAbstractSocket::SocketState socketState);

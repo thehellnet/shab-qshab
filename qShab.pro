@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     protocol/client.cpp \
     data/gpshandler.cpp \
     data/habhandler.cpp \
-    protocol/hab.cpp
+    protocol/hab.cpp \
+    protocol/serverpingline.cpp
 
 HEADERS  += mainwindow.hpp \
     configwindow.hpp \
@@ -55,7 +56,8 @@ HEADERS  += mainwindow.hpp \
     protocol/client.hpp \
     data/gpshandler.hpp \
     data/habhandler.hpp \
-    protocol/hab.hpp
+    protocol/hab.hpp \
+    protocol/serverpingline.hpp
 
 FORMS    += mainwindow.ui \
     configwindow.ui

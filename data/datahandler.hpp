@@ -39,6 +39,9 @@ class DataHandler : public QObject
         GPSHandler* gpsHandler;
         HabHandler* habHandler;
 
+        QTimer* heartBeatTimer;
+        QDateTime lastPingTime;
+
         void parseNewLine(Line* line);
         Client* findClientById(QString id);
         void toogleLocalPositionUpdateTimer();
@@ -57,6 +60,7 @@ class DataHandler : public QObject
         void handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState);
         void handleLocalGpsNewPosition(QGeoCoordinate newPosition);
         void sendLocalClientUpdates();
+        void heartBeatCheck();
 
     signals:
         void newLine(QString line);

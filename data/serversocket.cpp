@@ -1,5 +1,6 @@
 #include <QString>
 #include <QByteArray>
+#include <QTimer>
 
 #include "serversocket.hpp"
 
@@ -7,11 +8,17 @@ ServerSocket::ServerSocket(QObject *parent) : QObject(parent)
 {
     socket = nullptr;
     running = false;
+    reconnecting = false;
 }
 
 bool ServerSocket::isRunning() const
 {
     return running;
+}
+
+bool ServerSocket::isSocketConnected()
+{
+    return socket != nullptr && socket->isOpen();
 }
 
 void ServerSocket::start(QString address, quint16 port)
@@ -33,34 +40,72 @@ void ServerSocket::stop()
     if(socket == nullptr)
         return;
 
-    disconnectSocket();
-
     running = false;
+
+    disconnectSocket();
 }
 
 void ServerSocket::connectSocket()
 {
-    socket = new QTcpSocket(this);
-    socket->connectToHost(address, port);
-    connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
-    connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
+    mutex.lock();
+
+    qDebug() << "Connecting socket";
+
+    if(socket == nullptr) {
+        socket = new QTcpSocket(this);
+        socket->connectToHost(address, port);
+        connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
+        connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
+    }
+
+    mutex.unlock();
 }
 
 void ServerSocket::disconnectSocket()
 {
-    socket->close();
+    mutex.lock();
 
-    delete socket;
-    socket = nullptr;
+    qDebug() << "Disconnecting socket";
+
+    if(socket != nullptr) {
+        socket->close();
+
+        delete socket;
+        socket = nullptr;
+    }
+
+    mutex.unlock();
+}
+
+void ServerSocket::restartSocket()
+{
+    qDebug() << "Reconnecting socket";
+
+    if(!running)
+        return;
+
+    reconnecting = true;
+    disconnectSocket();
+    connectSocket();
+    reconnecting = false;
 }
 
 void ServerSocket::socketStateChanged(QAbstractSocket::SocketState socketState)
 {
+    qDebug() << "Socket state changed:" << socketState;
+
     emit newSocketState(socketState);
+
+    if(!reconnecting
+            && socketState == QAbstractSocket::UnconnectedState
+            && running)
+        QTimer::singleShot(2000, this, SLOT(restartSocket()));
 }
 
 void ServerSocket::writeLine(QString line)
 {
+    qDebug() << "Write line" << line;
+
     if(socket == nullptr || !socket->isOpen())
         return;
 
@@ -86,6 +131,7 @@ void ServerSocket::readData()
         return;
 
     lastLine = line;
+    qDebug() << "Read line:" << lastLine;
 
     emit newLine(line);
 }

@@ -26,6 +26,7 @@ Line* LineParser::parseLine(QString rawLine)
     if(items[1] == "CC") return parseClientConnect(items);
     if(items[1] == "CU") return parseClientUpdate(items);
     if(items[1] == "CD") return parseClientDisconnect(items);
+    if(items[1] == "SP") return parseServerPing(items);
 
     return nullptr;
 }
@@ -104,5 +105,16 @@ ClientDisconnectLine* LineParser::parseClientDisconnect(QStringList items)
 
     ClientDisconnectLine* line = new ClientDisconnectLine();
     line->setId(items[2]);
+    return line;
+}
+
+ServerPingLine* LineParser::parseServerPing(QStringList items)
+{
+    // 0000|SP|timestamp
+    if(items.size() != 3 || items[1] != "SP")
+        return nullptr;
+
+    ServerPingLine* line = new ServerPingLine();
+    line->setTimestamp(items[2].toULongLong());
     return line;
 }
