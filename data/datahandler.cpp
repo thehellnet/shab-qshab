@@ -263,8 +263,7 @@ void DataHandler::heartBeatCheck()
 
     if(serverSocket->isSocketConnected()) {
         ServerPingLine pingLine;
-//        pingLine.setTimestamp(QDateTime::currentDateTime().toMSecsSinceEpoch());
-        pingLine.setTimestamp(0);
+        pingLine.setTimestamp(QDateTime::currentDateTime().toMSecsSinceEpoch());
         QString socketLine = Utility::addChecksum(pingLine.serialize());
         serverSocket->writeLine(socketLine);
     }

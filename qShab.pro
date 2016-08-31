@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     data/gpshandler.cpp \
     data/habhandler.cpp \
     protocol/hab.cpp \
-    protocol/serverpingline.cpp
+    protocol/serverpingline.cpp \
+    aboutdialog.cpp
 
 HEADERS  += mainwindow.hpp \
     configwindow.hpp \
@@ -57,9 +58,11 @@ HEADERS  += mainwindow.hpp \
     data/gpshandler.hpp \
     data/habhandler.hpp \
     protocol/hab.hpp \
-    protocol/serverpingline.hpp
+    protocol/serverpingline.hpp \
+    aboutdialog.hpp
 
 FORMS    += mainwindow.ui \
-    configwindow.ui
+    configwindow.ui \
+    aboutdialog.ui
 
 RESOURCES += resources.qrc

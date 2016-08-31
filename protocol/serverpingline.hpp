@@ -13,7 +13,7 @@ class ServerPingLine : public Line
         QString serialize() override;
 
         unsigned long long getTimestamp() const;
-        void setTimestamp(unsigned long long value);
+        void setTimestamp(qint64 value);
 
     private:
         unsigned long long timestamp;

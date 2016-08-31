@@ -21,7 +21,7 @@ unsigned long long ServerPingLine::getTimestamp() const
     return timestamp;
 }
 
-void ServerPingLine::setTimestamp(unsigned long long value)
+void ServerPingLine::setTimestamp(qint64 value)
 {
     timestamp = value;
 }

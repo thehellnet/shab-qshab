@@ -104,7 +104,7 @@ void ServerSocket::socketStateChanged(QAbstractSocket::SocketState socketState)
 
 void ServerSocket::writeLine(QString line)
 {
-    qDebug() << "Write line" << line;
+    qDebug() << "Socket Write line" << line;
 
     if(socket == nullptr || !socket->isOpen())
         return;
@@ -131,7 +131,7 @@ void ServerSocket::readData()
         return;
 
     lastLine = line;
-    qDebug() << "Read line:" << lastLine;
+    qDebug() << "Socket Read line:" << lastLine;
 
     emit newLine(line);
 }

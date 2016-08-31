@@ -11,6 +11,7 @@
 #include "configwindow.hpp"
 #include "statusbarwidgets.hpp"
 #include "datalogger.hpp"
+#include "aboutdialog.hpp"
 
 namespace Ui {
     class MainWindow;
@@ -32,6 +33,7 @@ class MainWindow : public QMainWindow
         StatusBarWidgets* statusBarWidgets;
         DataLogger* dataLogger;
         QTableWidget* clientsTable;
+        AboutDialog* aboutDialog;
 
         QStatusBar* statusBar;
         QWebEngineView* webView;
@@ -87,6 +89,7 @@ class MainWindow : public QMainWindow
         void updateHabFixStatus(Hab* hab);
         void updateHabTelemetry(Hab* hab);
 
+        void showAboutDialog();
 };
 
 #endif // MAINWINDOW_HPP

@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     dataHandler = new DataHandler(this);
     statusBarWidgets = new StatusBarWidgets(this);
     dataLogger = new DataLogger(this);
+    aboutDialog = new AboutDialog(this);
 
     clientsTable = ui->clientsTable;
     statusBar = ui->statusBar;
@@ -84,6 +85,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionStatusMapAuto, SIGNAL(triggered(bool)), this, SLOT(toogleMapAutoBoundsAndZoom()));
 
+    connect(ui->actionHelpAbout, SIGNAL(triggered(bool)), this, SLOT(showAboutDialog()));
+
     updateActionEnableStatus();
 }
 
@@ -93,6 +96,8 @@ MainWindow::~MainWindow()
     delete statusBarWidgets;
     delete configWindow;
     delete dataHandler;
+    delete aboutDialog;
+
     delete ui;
 }
 
@@ -457,4 +462,9 @@ void MainWindow::clearHabTelemetry()
     ui->infoTelemetryIntTempValue->setText("");
     ui->infoTelemetryExtTempValue->setText("");
     ui->infoTelemetryExtAltValue->setText("");
+}
+
+void MainWindow::showAboutDialog()
+{
+    aboutDialog->show();
 }
