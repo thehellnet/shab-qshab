@@ -111,7 +111,7 @@ void ConfigWindow::load()
 
     index = -1;
     for(int i=0; i<ui->habSerialPortComboBox->count(); i++)
-        if(ui->habSerialPortComboBox->currentText() == config->getHabSerialPort()) {
+        if(ui->habSerialPortComboBox->itemText(i) == config->getHabSerialPort()) {
             index = i;
             break;
         }
