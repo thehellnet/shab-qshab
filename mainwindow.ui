@@ -244,7 +244,7 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
         <item>
          <widget class="QGroupBox" name="clientsGroupBox">
           <property name="title">
@@ -292,15 +292,15 @@
           <property name="title">
            <string>Additional infos</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0,1,0,1">
-           <item row="2" column="4">
-            <widget class="QLabel" name="infoTelemetryExtAltLabel">
+          <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,1" columnminimumwidth="0,200,0,100,0">
+           <item row="0" column="0">
+            <widget class="QLabel" name="infoHabFixStatusLabel">
              <property name="text">
-              <string>External Altitude</string>
+              <string>HAB GPS Fix status</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1" colspan="2">
+           <item row="0" column="1">
             <widget class="QLabel" name="infoHabFixStatusValue">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
@@ -313,56 +313,37 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="3">
-            <widget class="QLabel" name="infoTelemetryExtTempValue">
-             <property name="font">
-              <font>
-               <family>Monospace</family>
-               <pointsize>9</pointsize>
-              </font>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
-             </property>
+           <item row="0" column="2">
+            <widget class="QLabel" name="infoTelemetryIntTempLabel">
              <property name="text">
-              <string>TextLabel</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <string>Internal temp</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="0" column="3">
             <widget class="QLabel" name="infoTelemetryIntTempValue">
-             <property name="font">
-              <font>
-               <family>Monospace</family>
-               <pointsize>9</pointsize>
-              </font>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
-             </property>
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
+             <property name="minimumSize">
               <size>
-               <width>20</width>
-               <height>40</height>
+               <width>0</width>
+               <height>0</height>
               </size>
              </property>
-            </spacer>
+             <property name="font">
+              <font>
+               <family>Monospace</family>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="infoImageProgressLabel">
@@ -371,35 +352,53 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="infoHabFixStatusLabel">
-             <property name="text">
-              <string>HAB GPS Fix status</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QLabel" name="infoTelemetryExtTempLabel">
-             <property name="text">
-              <string>External temp</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" colspan="2">
+           <item row="1" column="1">
             <widget class="QProgressBar" name="infoImageProgressBar">
              <property name="value">
               <number>24</number>
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="infoTelemetryIntTempLabel">
+           <item row="1" column="2">
+            <widget class="QLabel" name="infoTelemetryExtTempLabel">
              <property name="text">
-              <string>Internal temp</string>
+              <string>External temp</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="5">
+           <item row="1" column="3">
+            <widget class="QLabel" name="infoTelemetryExtTempValue">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Monospace</family>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="infoTelemetryExtAltLabel">
+             <property name="text">
+              <string>External altitude</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
             <widget class="QLabel" name="infoTelemetryExtAltValue">
              <property name="font">
               <font>
@@ -412,6 +411,111 @@
              </property>
              <property name="text">
               <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="4">
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="ratioGroupBox">
+          <property name="title">
+           <string>Socket/Radio ratio</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1,0,0,1,0">
+           <property name="bottomMargin">
+            <number>8</number>
+           </property>
+           <item row="0" column="4">
+            <widget class="QProgressBar" name="ratioRadioProgressBar">
+             <property name="maximum">
+              <number>10</number>
+             </property>
+             <property name="value">
+              <number>3</number>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="textVisible">
+              <bool>false</bool>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QProgressBar" name="ratioSocketProgressBar">
+             <property name="maximum">
+              <number>10</number>
+             </property>
+             <property name="value">
+              <number>3</number>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="textVisible">
+              <bool>false</bool>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="invertedAppearance">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="3">
+            <widget class="QLabel" name="ratioSocketLabel">
+             <property name="text">
+              <string>Socket</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3" colspan="3">
+            <widget class="QLabel" name="socketRadioLabel">
+             <property name="text">
+              <string>Radio</string>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>

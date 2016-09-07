@@ -36,6 +36,9 @@ MainWindow::MainWindow(QWidget *parent) :
     positionInfoLocalGpsLongitudeValue = ui->positionInfoLocalGpsLongitudeValue;
     positionInfoLocalGpsAltitudeValue = ui->positionInfoLocalGpsAltitudeValue;
 
+    ratioSocketProgressBar = ui->ratioSocketProgressBar;
+    ratioRadioProgressBar = ui->ratioRadioProgressBar;
+
     clearHabPosition();
     clearLocalGpsPosition();
     clearHabFixStatus();
@@ -62,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(dataHandler, SIGNAL(newImage(QByteArray)), this, SLOT(handleNewImage(QByteArray)));
     connect(dataHandler, SIGNAL(habPositionUpdated(Hab*)), this, SLOT(updateHabFixStatus(Hab*)));
     connect(dataHandler, SIGNAL(habTelemetryUpdated(Hab*)), this, SLOT(updateHabTelemetry(Hab*)));
+
+    connect(dataHandler, SIGNAL(updateRatio(int, int)), this, SLOT(updateRatioProgressBars(int, int)));
 
     configWindow->setModal(true);
     connect(configWindow, SIGNAL(configurationChanged()), this, SLOT(configurationChanged()));
@@ -467,4 +472,13 @@ void MainWindow::clearHabTelemetry()
 void MainWindow::showAboutDialog()
 {
     aboutDialog->show();
+}
+
+void MainWindow::updateRatioProgressBars(int radioLines, int socketLines)
+{
+    int max = radioLines + socketLines;
+    ratioRadioProgressBar->setMaximum(max);
+    ratioRadioProgressBar->setValue(radioLines);
+    ratioSocketProgressBar->setMaximum(max);
+    ratioSocketProgressBar->setValue(socketLines);
 }

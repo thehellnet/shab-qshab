@@ -5,6 +5,7 @@
 #include <QWebEngineView>
 #include <QStatusBar>
 #include <QTableWidget>
+#include <QProgressBar>
 
 #include "data/datahandler.hpp"
 #include "config/configuration.hpp"
@@ -43,6 +44,9 @@ class MainWindow : public QMainWindow
         QLabel* positionInfoLocalGpsLatitudeValue;
         QLabel* positionInfoLocalGpsLongitudeValue;
         QLabel* positionInfoLocalGpsAltitudeValue;
+
+        QProgressBar* ratioSocketProgressBar;
+        QProgressBar* ratioRadioProgressBar;
 
         void initWebView();
         void initStatusBar();
@@ -90,6 +94,8 @@ class MainWindow : public QMainWindow
         void updateHabTelemetry(Hab* hab);
 
         void showAboutDialog();
+
+        void updateRatioProgressBars(int radioLines, int socketLines);
 };
 
 #endif // MAINWINDOW_HPP

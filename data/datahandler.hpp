@@ -42,9 +42,13 @@ class DataHandler : public QObject
         QTimer* heartBeatTimer;
         QDateTime lastPingTime;
 
+        QList<int> ratioLines;
+
         void parseNewLine(Line* line);
         Client* findClientById(QString id);
         void toogleLocalPositionUpdateTimer();
+
+        void checkRatio();
 
     public slots:
         void startHab();
@@ -56,7 +60,9 @@ class DataHandler : public QObject
         void reloadLocalClient();
 
     private slots:
-        void handleNewLine(QString strLine);
+        void handleSerialNewLine(QString strLine);
+        void handleSocketNewLine(QString strLine);
+        void handleNewLine(QString strLine, int type);
         void handleServerSyncSocketEvent(QAbstractSocket::SocketState socketState);
         void handleLocalGpsNewPosition(QGeoCoordinate newPosition);
         void sendLocalClientUpdates();
@@ -75,6 +81,7 @@ class DataHandler : public QObject
         void habImageSlice(Hab* hab);
         void habTelemetryUpdated(Hab* hab);
         void newImage(QByteArray data);
+        void updateRatio(int radioLines, int socketLines);
 };
 
 #endif // DATAHANDLER_HPP

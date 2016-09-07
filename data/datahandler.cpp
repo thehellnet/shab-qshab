@@ -24,14 +24,14 @@ DataHandler::DataHandler(QObject *parent) : QObject(parent)
     connect(localUpdateTimer, SIGNAL(timeout()), this, SLOT(sendLocalClientUpdates()));
 
     serverSocket = new ServerSocket(this);
-    connect(serverSocket, SIGNAL(newLine(QString)), this, SLOT(handleNewLine(QString)));
+    connect(serverSocket, SIGNAL(newLine(QString)), this, SLOT(handleSocketNewLine(QString)));
     connect(serverSocket, SIGNAL(newSocketState(QAbstractSocket::SocketState)), this, SLOT(handleServerSyncSocketEvent(QAbstractSocket::SocketState)));
 
     gpsHandler = new GPSHandler(this);
     connect(gpsHandler, SIGNAL(newPosition(QGeoCoordinate)), this, SLOT(handleLocalGpsNewPosition(QGeoCoordinate)));
 
     habHandler = new HabHandler(this);
-    connect(habHandler, SIGNAL(newLine(QString)), this, SLOT(handleNewLine(QString)));
+    connect(habHandler, SIGNAL(newLine(QString)), this, SLOT(handleSerialNewLine(QString)));
 
     heartBeatTimer = new QTimer(this);
     heartBeatTimer->setInterval(2500);
@@ -101,7 +101,39 @@ void DataHandler::toogleLocalPositionUpdateTimer()
         localUpdateTimer->stop();
 }
 
-void DataHandler::handleNewLine(QString strLine)
+void DataHandler::checkRatio()
+{
+    while(ratioLines.size() > 20)
+        ratioLines.removeAt(0);
+
+    int radioLines = 0;
+    int socketLines = 0;
+    QList<int>::iterator i;
+    for (i = ratioLines.begin(); i != ratioLines.end(); ++i) {
+        switch(*i) {
+            case 0:
+                radioLines++;
+                break;
+            case 1:
+                socketLines++;
+                break;
+        }
+    }
+
+    emit updateRatio(radioLines, socketLines);
+}
+
+void DataHandler::handleSerialNewLine(QString strLine)
+{
+    handleNewLine(strLine, 0);
+}
+
+void DataHandler::handleSocketNewLine(QString strLine)
+{
+    handleNewLine(strLine, 1);
+}
+
+void DataHandler::handleNewLine(QString strLine, int type)
 {
     if(strLine == lastLine)
         return;
@@ -114,6 +146,13 @@ void DataHandler::handleNewLine(QString strLine)
     serverSocket->writeLine(lastLine);
 
     emit newLine(strLine);
+
+    if(line->getCommand() == HabPosition
+            || line->getCommand() == HabImage
+            || line->getCommand() == HabTelemetry) {
+        ratioLines.append(type);
+        checkRatio();
+    }
 
     parseNewLine(line);
 
