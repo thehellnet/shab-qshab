@@ -143,13 +143,14 @@ void DataHandler::handleNewLine(QString strLine, int type)
         return;
 
     lastLine = strLine;
-    serverSocket->writeLine(lastLine);
 
     emit newLine(strLine);
 
     if(line->getCommand() == HabPosition
             || line->getCommand() == HabImage
             || line->getCommand() == HabTelemetry) {
+        if(type == 0)
+            serverSocket->writeLine(strLine);
         ratioLines.append(type);
         checkRatio();
     }
