@@ -5,6 +5,16 @@ Hab::Hab()
 
 }
 
+long Hab::getLastDateTime() const
+{
+    return lastDateTime;
+}
+
+void Hab::setLastDateTime(long value)
+{
+    lastDateTime = value;
+}
+
 int Hab::getFixStatus() const
 {
     return fixStatus;

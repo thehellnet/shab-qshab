@@ -12,6 +12,9 @@ class HabImageLine : public Line
         HabImageLine();
         ~HabImageLine();
 
+        long getTimestamp() const;
+        void setTimestamp(long value);
+
         QString serialize() override;
 
         int getSliceTot() const;
@@ -24,6 +27,8 @@ class HabImageLine : public Line
         void setData(const QByteArray& value);
 
     private:
+        long timestamp;
+
         int sliceTot;
         int sliceNum;
         QByteArray data;

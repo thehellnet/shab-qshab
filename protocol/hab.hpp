@@ -8,6 +8,9 @@ class Hab
     public:
         Hab();
 
+        long getLastDateTime() const;
+        void setLastDateTime(long value);
+
         int getFixStatus() const;
         void setFixStatus(int value);
 
@@ -40,6 +43,8 @@ class Hab
         void setExtAlt(float value);
 
     private:
+        long lastDateTime;
+
         int fixStatus;
         double latitude;
         double longitude;

@@ -123,6 +123,22 @@ void DataHandler::checkRatio()
     emit updateRatio(radioLines, socketLines);
 }
 
+void DataHandler::checkErrors(bool isLineGood)
+{
+    while(errorLines.size() > 20)
+        errorLines.removeAt(0);
+
+    errorLines.append(isLineGood);
+
+    int errors = 0;
+    QList<bool>::iterator i;
+    for (i = errorLines.begin(); i != errorLines.end(); ++i)
+        if(*i == false)
+            errors++;
+
+    emit updateErrors(errors, errorLines.size());
+}
+
 void DataHandler::handleSerialNewLine(QString strLine)
 {
     handleNewLine(strLine, 0);
@@ -139,9 +155,12 @@ void DataHandler::handleNewLine(QString strLine, int type)
         return;
 
     Line* line = LineParser::parseLine(strLine);
-    if(line == nullptr)
+    if(line == nullptr) {
+        checkErrors(false);
         return;
+    }
 
+    checkErrors(true);
     lastLine = strLine;
 
     emit newLine(strLine);

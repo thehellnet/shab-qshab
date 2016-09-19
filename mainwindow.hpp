@@ -96,6 +96,7 @@ class MainWindow : public QMainWindow
         void showAboutDialog();
 
         void updateRatioProgressBars(int radioLines, int socketLines);
+        void updateErrorsProgressBar(int errors, int lines);
 };
 
 #endif // MAINWINDOW_HPP

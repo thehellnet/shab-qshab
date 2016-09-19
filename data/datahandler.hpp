@@ -43,12 +43,14 @@ class DataHandler : public QObject
         QDateTime lastPingTime;
 
         QList<int> ratioLines;
+        QList<bool> errorLines;
 
         void parseNewLine(Line* line);
         Client* findClientById(QString id);
         void toogleLocalPositionUpdateTimer();
 
         void checkRatio();
+        void checkErrors(bool isLineGood);
 
     public slots:
         void startHab();
@@ -82,6 +84,7 @@ class DataHandler : public QObject
         void habTelemetryUpdated(Hab* hab);
         void newImage(QByteArray data);
         void updateRatio(int radioLines, int socketLines);
+        void updateErrors(int errors, int lines);
 };
 
 #endif // DATAHANDLER_HPP

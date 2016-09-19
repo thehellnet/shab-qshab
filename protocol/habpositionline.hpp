@@ -10,6 +10,9 @@ class HabPositionLine : public Line
         HabPositionLine();
         ~HabPositionLine();
 
+        long getTimestamp() const;
+        void setTimestamp(long value);
+
         QString serialize() override;
 
         int getFixStatus() const;
@@ -25,6 +28,8 @@ class HabPositionLine : public Line
         void setAltitude(float value);
 
     private:
+        long timestamp;
+
         int fixStatus;
         float latitude;
         float longitude;

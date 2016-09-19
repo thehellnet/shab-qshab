@@ -14,6 +14,9 @@ class HabTelemetryLine : public Line
 
         QString serialize() override;
 
+        long getTimestamp() const;
+        void setTimestamp(long value);
+
         float getIntTemp() const;
         void setIntTemp(float value);
 
@@ -24,6 +27,8 @@ class HabTelemetryLine : public Line
         void setExtAlt(float value);
 
     private:
+        long timestamp;
+
         float intTemp;
         float extTemp;
         float extAlt;

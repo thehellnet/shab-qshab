@@ -33,41 +33,44 @@ Line* LineParser::parseLine(QString rawLine)
 
 HabPositionLine* LineParser::parseHabPosition(QStringList items)
 {
-    // 0000|HP|fixstatus|latitude|longitude|altitude
-    if(items.size() != 6 || items[1] != "HP")
+    // 0000|HP|timestamp|fixstatus|latitude|longitude|altitude
+    if(items.size() != 7 || items[1] != "HP")
         return nullptr;
 
     HabPositionLine* line = new HabPositionLine();
-    line->setFixStatus(items[2].toInt());
-    line->setLatitude(items[3].toFloat());
-    line->setLongitude(items[4].toFloat());
-    line->setAltitude(items[5].toFloat());
+    line->setTimestamp(items[2].toLong());
+    line->setFixStatus(items[3].toInt());
+    line->setLatitude(items[4].toFloat());
+    line->setLongitude(items[5].toFloat());
+    line->setAltitude(items[6].toFloat());
     return line;
 }
 
 HabImageLine* LineParser::parseHabImage(QStringList items)
 {
-    // 0000|HI|slicenum|slicetot|base64data
-    if(items.size() != 5 || items[1] != "HI")
+    // 0000|HI|timestamp|slicenum|slicetot|base64data
+    if(items.size() != 6 || items[1] != "HI")
         return nullptr;
 
     HabImageLine* line = new HabImageLine();
-    line->setSliceTot(items[2].toInt());
-    line->setSliceNum(items[3].toInt());
-    line->setData(QByteArray::fromBase64(items[4].toLatin1(), QByteArray::Base64UrlEncoding));
+    line->setTimestamp(items[2].toLong());
+    line->setSliceTot(items[3].toInt());
+    line->setSliceNum(items[4].toInt());
+    line->setData(QByteArray::fromBase64(items[5].toLatin1(), QByteArray::Base64UrlEncoding));
     return line;
 }
 
 HabTelemetryLine* LineParser::parseHabTelemetry(QStringList items)
 {
-    // 0000|HT|int_temp|ext_temp|ext_alt
-    if(items.size() != 5 || items[1] != "HT")
+    // 0000|HT|timestamp|int_temp|ext_temp|ext_alt
+    if(items.size() != 6 || items[1] != "HT")
         return nullptr;
 
     HabTelemetryLine* line = new HabTelemetryLine();
-    line->setIntTemp(items[2].toFloat());
-    line->setExtTemp(items[3].toFloat());
-    line->setExtAlt(items[4].toFloat());
+    line->setTimestamp(items[2].toLong());
+    line->setIntTemp(items[3].toFloat());
+    line->setExtTemp(items[4].toFloat());
+    line->setExtAlt(items[5].toFloat());
     return line;
 }
 

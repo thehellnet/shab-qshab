@@ -67,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(dataHandler, SIGNAL(habTelemetryUpdated(Hab*)), this, SLOT(updateHabTelemetry(Hab*)));
 
     connect(dataHandler, SIGNAL(updateRatio(int, int)), this, SLOT(updateRatioProgressBars(int, int)));
+    connect(dataHandler, SIGNAL(updateErrors(int, int)), this, SLOT(updateErrorsProgressBar(int, int)));
 
     configWindow->setModal(true);
     connect(configWindow, SIGNAL(configurationChanged()), this, SLOT(configurationChanged()));
@@ -481,4 +482,10 @@ void MainWindow::updateRatioProgressBars(int radioLines, int socketLines)
     ratioRadioProgressBar->setValue(radioLines);
     ratioSocketProgressBar->setMaximum(max);
     ratioSocketProgressBar->setValue(socketLines);
+}
+
+void MainWindow::updateErrorsProgressBar(int errors, int lines)
+{
+    ui->infoErrorProgressBar->setMaximum(lines);
+    ui->infoErrorProgressBar->setValue(errors);
 }

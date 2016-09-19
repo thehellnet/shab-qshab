@@ -12,10 +12,21 @@ HabImageLine::~HabImageLine()
 
 QString HabImageLine::serialize()
 {
-    return QString("HI|%1|%2|%3")
+    return QString("HI|%1|%2|%3|%4")
+            .arg(timestamp)
             .arg(sliceTot)
             .arg(sliceNum)
             .arg(QString(data.toBase64(QByteArray::Base64UrlEncoding)));
+}
+
+long HabImageLine::getTimestamp() const
+{
+    return timestamp;
+}
+
+void HabImageLine::setTimestamp(long value)
+{
+    timestamp = value;
 }
 
 int HabImageLine::getSliceTot() const
