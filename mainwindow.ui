@@ -493,16 +493,16 @@
            <item row="0" column="0">
             <widget class="QProgressBar" name="ratioSocketProgressBar">
              <property name="maximum">
-              <number>10</number>
+              <number>20</number>
              </property>
              <property name="value">
-              <number>3</number>
+              <number>0</number>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
              <property name="textVisible">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -510,24 +510,33 @@
              <property name="invertedAppearance">
               <bool>false</bool>
              </property>
+             <property name="format">
+              <string notr="true">%v</string>
+             </property>
             </widget>
            </item>
            <item row="0" column="1">
             <widget class="QProgressBar" name="ratioRadioProgressBar">
              <property name="maximum">
-              <number>10</number>
+              <number>20</number>
              </property>
              <property name="value">
-              <number>3</number>
+              <number>0</number>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
              <property name="textVisible">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="orientation">
               <enum>Qt::Vertical</enum>
+             </property>
+             <property name="invertedAppearance">
+              <bool>false</bool>
+             </property>
+             <property name="format">
+              <string notr="true">%v</string>
              </property>
             </widget>
            </item>
@@ -539,20 +548,26 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="maximum">
+              <number>20</number>
+             </property>
              <property name="value">
-              <number>24</number>
+              <number>0</number>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
              <property name="textVisible">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
              <property name="invertedAppearance">
               <bool>false</bool>
+             </property>
+             <property name="format">
+              <string notr="true">%v</string>
              </property>
             </widget>
            </item>
